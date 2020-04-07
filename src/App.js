@@ -1,26 +1,84 @@
 import React from 'react';
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
+
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import DefaultLayout from './components/layout/DefaultLayout';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+import { setCurrentUser, logout } from './redux/actions/userActions';
+import jwtDecode from 'jwt-decode';
+import setAuthToken from './utils/setAuthToken';
 import './App.css';
+import axios from 'axios';
+import Messages from './components/common/Messages';
+import { toastr } from 'react-redux-toastr';
+
+if (localStorage.getItem('token')) {
+	const token = localStorage.getItem('token');
+	setAuthToken(token);
+	const decoded = jwtDecode(token);
+
+	const currentTime = Date.now() / 1000;
+	if (decoded.exp < currentTime) {
+		store.dispatch(logout());
+		window.location.href = '/';
+	}
+	store.dispatch(setCurrentUser(decoded));
+}
+
+axios.defaults.baseURL = 'http://localhost:3001/api';
+//axios.defaults.headers.common['Authorization'] = AUTH_TOKEN
+
+axios.interceptors.request.use(
+	config => {
+		if (!config.url.endsWith('/login')) {
+			console.log('Entrando no request interceptor...');
+			const token = localStorage.getItem('token');
+			const decoded = jwtDecode(token);
+			const currentTime = Date.now() / 1000;
+			if (decoded.exp < currentTime) {
+				store.dispatch(logout());
+				window.location.href = '/';
+			}
+		}
+		return config;
+	},
+	error => {
+		return Promise.reject(error);
+	}
+);
+
+axios.interceptors.response.use(
+	response => {
+		console.log('response interceptor', response);
+		return response;
+	},
+	error => {
+		if (error.response.status === 401) {
+			toastr.error('Sessão expirada faça login novamente');
+			store.dispatch(logout());
+			window.location.href = '/';
+		}
+		return Promise.reject(error);
+	}
+);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<Provider store={store}>
+			<Router>
+				<div className="App">
+					<Messages />
+					<Switch>
+						<Route exact path="/" component={Login} />
+						<Route path="/inicio" component={DefaultLayout} />
+					</Switch>
+				</div>
+			</Router>
+		</Provider>
+	);
 }
 
 export default App;

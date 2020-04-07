@@ -1,0 +1,13 @@
+
+1 - Criar estrutura do projeto OK
+2 - Adicionar os packages necessarios OK
+3 - Criar os templates OK
+
+4 - Gerar prototipo da ficha de consulta
+5 - Alterar os procedimentos para o seguinte formato - Nome procedimento + dedo + pé
+6 - Incluir na consulta o tipo retorno
+7 - Alterar as telas de cadastro para trabalhar com redux OK
+8 - configurar as tabelas para trabalharem com redux OK
+
+9 - Mudar nome das rotas por conta do breadcrumb OK
+11 - No cadastro de clientes incluir na tabela um botão para visualizar as consultas
