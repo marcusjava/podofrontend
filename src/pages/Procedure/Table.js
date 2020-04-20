@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { FaTrashAlt } from 'react-icons/fa';
 import { Badge, Image } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Procedures } from '../../redux/actions/procedureActions';
@@ -8,19 +7,19 @@ import { deletePhoto } from '../../redux/actions/procedureActions';
 import './styles.css';
 
 const Table = ({ rowSelect }) => {
-	const { items } = useSelector(state => state.procedure.procedures);
+	const { items } = useSelector((state) => state.procedure.procedures);
+
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		dispatch(Procedures());
-	}, []);
+	}, [dispatch]);
 
 	const selectRowProp = {
 		mode: 'radio',
 		clickToSelect: false,
-		onSelect: (row, isSelected, e) => rowSelect(row),
+		onSelect: (row) => rowSelect(row),
 	};
-
-	const dispatch = useDispatch();
 
 	const formatService = (cell, row) => {
 		return cell.description;

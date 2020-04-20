@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col, Button, Image } from 'react-bootstrap';
+import { Row, Col, Image } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getClient, Clients } from '../../redux/actions/clientActions';
 import dayjs from 'dayjs';
 import './styles.css';
-import Table from './Table';
+import Table from '../Consult/Table';
 
 const ClientDetail = () => {
 	const dispatch = useDispatch();
 	const { item } = useSelector((state) => state.client.client);
-	const { items } = useSelector((state) => state.client.clients);
 	const { id } = useParams();
 
 	useEffect(() => {
 		dispatch(getClient(id));
 		dispatch(Clients());
-	}, []);
+	}, [dispatch, id]);
 
 	return (
 		<>
@@ -110,7 +109,7 @@ const ClientDetail = () => {
 			</Row>
 			<Row className="mt-4">
 				<Col md={12}>
-					<Table data={items} />
+					<Table data={item.consults} />
 				</Col>
 			</Row>
 		</>

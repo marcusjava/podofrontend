@@ -14,6 +14,7 @@ const Service = () => {
 	const formRef = useRef(null);
 
 	async function loadServices() {
+		console.log('recebendo dados da API');
 		const result = await axios.get('/services');
 		setServices(result.data);
 	}

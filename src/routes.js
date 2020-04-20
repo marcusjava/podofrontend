@@ -43,9 +43,15 @@ const Consults = Loadable({
 	loading: Loading,
 });
 
+const Consult = Loadable({
+	loader: () => import('./pages/Consult/Consult'),
+	loading: Loading,
+});
+
 const routes = [
 	{ path: '/inicio/principal', name: 'Dashboard', Component: Dashboard },
 	{ path: '/inicio/consultas', name: 'Consults', Component: Consults },
+	{ path: '/inicio/consulta/:id', name: 'Consult', Component: Consult },
 	{ path: '/inicio/clientes', exact: true, name: 'Client', Component: Client },
 	{ path: '/inicio/clientes/detalhes/:id', name: 'ClientDetail', Component: ClientDetail },
 	{ path: '/inicio/administrador/usuario', name: 'User', Component: User },

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
+import { format } from 'date-fns';
 import { Row, Col, Button, Modal } from 'react-bootstrap';
 import { Clients, searchClients } from '../../redux/actions/clientActions';
 import { Form } from '@unform/web';
@@ -19,11 +20,11 @@ function AddConsult() {
 	const [clientSel, setClientSel] = useState({});
 	const [show, setShow] = useState(false);
 
-	const { clients } = useSelector(state => state.client);
+	const { clients } = useSelector((state) => state.client);
 
-	const { success, error } = useSelector(state => state.consult.consult);
+	const { success, error } = useSelector((state) => state.consult.consult);
 
-	const { procedures } = useSelector(state => state.procedure);
+	const { procedures } = useSelector((state) => state.procedure);
 	const dispatch = useDispatch();
 
 	const formRef = useRef(null);
@@ -34,11 +35,12 @@ function AddConsult() {
 	}, []);
 
 	useEffect(() => {
-		if (success == true) {
+		if (success === true) {
 			formRef.current.setErrors({});
 			formRef.current.reset();
+			setShow(false);
 		}
-		if (error == true) {
+		if (error === false) {
 			const errorMessages = {};
 			errorMessages[error.path] = error.message;
 			formRef.current.setErrors(errorMessages);
@@ -46,29 +48,28 @@ function AddConsult() {
 	}, [success, error]);
 
 	const handleSubmit = async (data, { reset }) => {
-		console.log(data);
 		try {
 			const schema = Yup.object().shape({
 				date: Yup.string().required('Informe a data da consulta'),
-				client: Yup.string()
-					.ensure()
-					.required('Informe o cliente'),
-				procedures: Yup.string()
-					.ensure()
-					.required('Informe os procedimentos'),
+				client: Yup.string().ensure().required('Informe o cliente'),
+				procedures: Yup.string().ensure().required('Informe os procedimentos'),
+				type_consult: Yup.string().ensure().required('Informe o tipo de consulta'),
 			});
 			await schema.validate(data, { abortEarly: false });
-			const sendData = new FormData();
-			sendData.append('date', dayjs(data.date).format('YYYY-MM-DDTHH:mm:ss.sssZ'));
-			sendData.append('client', data.client.value);
-			sendData.append('procedures', data.procedures);
-			sendData.append('type', data.type);
-			sendData.append('observations', data.observations);
+			const sendData = {
+				date: dayjs(data.date).format('YYYY-MM-DDTHH:mm:ss.sssZ'),
+				client: data.client.value,
+				procedures: data.procedures,
+				type_consult: data.type_consult,
+				observations: data.observations,
+				status: { value: '0', label: 'Marcada' },
+			};
+
 			dispatch(saveConsult(sendData));
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
-				error.inner.forEach(erro => {
+				error.inner.forEach((erro) => {
 					errorMessages[erro.path] = erro.message;
 					formRef.current.setErrors(errorMessages);
 				});
@@ -76,13 +77,13 @@ function AddConsult() {
 		}
 	};
 
-	const clientInputChange = input => {
+	const clientInputChange = (input) => {
 		if (input) {
 			dispatch(searchClients(input));
 		}
 	};
 
-	const procedInputChange = input => {
+	const procedInputChange = (input) => {
 		if (input) {
 			dispatch(searchProcedures(input));
 		} else {
@@ -90,12 +91,12 @@ function AddConsult() {
 		}
 	};
 
-	const onDateChanger = date => {
+	const onDateChanger = (date) => {
 		console.log(date);
 	};
 
-	const clientSelectChange = e => {
-		const selected = clients.items.filter(client => client.id == e.value);
+	const clientSelectChange = (e) => {
+		const selected = clients.items.filter((client) => client.id == e.value);
 		console.log(selected);
 		setClientSel(selected);
 	};
@@ -116,15 +117,8 @@ function AddConsult() {
 							<Col md={6}>
 								<DatePicker
 									placeholderText="Data/hora"
-									showTimeSelect
 									name="date"
-									isClearable={true}
-									onSelect={date => onDateChanger(date)}
-									timeFormat="HH:mm"
-									timeIntervals={10}
-									timeCaption="Hora"
-									dateFormat="dd/MM/yyyy HH:mm"
-									locale="pt-BR"
+									onSelect={(date) => onDateChanger(date)}
 								/>
 							</Col>
 						</Row>
@@ -133,9 +127,9 @@ function AddConsult() {
 								<Select
 									label="Cliente"
 									name="client"
-									onChange={e => clientSelectChange(e)}
+									onChange={(e) => clientSelectChange(e)}
 									options={clients.options}
-									onInputChange={input => clientInputChange(input)}
+									onInputChange={(input) => clientInputChange(input)}
 								/>
 							</Col>
 						</Row>
@@ -146,20 +140,19 @@ function AddConsult() {
 									isMulti
 									name="procedures"
 									options={procedures.options}
-									onInputChange={input => procedInputChange(input)}
+									onInputChange={(input) => procedInputChange(input)}
 								/>
 							</Col>
 						</Row>
 						<Row>
-							<Col md={6}>
+							<Col md={3}>
 								<Select
 									label="Tipo consulta"
-									isMulti
-									name="type"
+									name="type_consult"
 									options={[
-										{ value: 0, label: 'Agendada' },
-										{ value: 1, label: 'Retorno' },
-										{ value: 2, label: 'Urgência' },
+										{ label: 'Agendada', value: 0 },
+										{ label: 'Retorno', value: 1 },
+										{ label: 'Urgência', value: 2 },
 									]}
 								/>
 							</Col>

@@ -1,9 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import './styles.css';
 import Logo from '../../images/Logo2.png';
 import { Row, Col, Container, Image } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { login } from '../../redux/actions/userActions';
 import { withRouter } from 'react-router-dom';
 import { Form } from '@unform/web';
@@ -12,6 +12,13 @@ import * as Yup from 'yup';
 
 const Login = ({ errors, history, login }) => {
 	const formRef = useRef(null);
+	const { authenticated } = useSelector((state) => state.user.user);
+
+	useEffect(() => {
+		if (authenticated) {
+			history.push('/inicio/principal');
+		}
+	}, []);
 
 	const Login = async (data, { reset }) => {
 		try {

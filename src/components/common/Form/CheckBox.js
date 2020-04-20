@@ -15,7 +15,7 @@ const CheckBox = ({ name, info, label, disabled, ...rest }) => {
 	return (
 		<div className="form-check-inline">
 			<label className="form-check-label">
-				<input {...rest} ref={inputRef} className="form-check-input" />
+				<input type="checkbox" {...rest} ref={inputRef} className="form-check-input" />
 				{label}
 			</label>
 		</div>

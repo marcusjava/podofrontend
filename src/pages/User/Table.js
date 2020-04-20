@@ -11,7 +11,7 @@ const Table = ({ rowSelect }) => {
 
 	useEffect(() => {
 		dispatch(getUsers());
-	}, []);
+	}, [dispatch]);
 
 	const statusFormat = (cell, row) => {
 		return (

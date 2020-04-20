@@ -17,15 +17,15 @@ const Procedure = () => {
 
 	const formRef = useRef(null);
 
+	useEffect(() => {
+		dispatch(Services());
+	}, [dispatch]);
+
 	const rowSelect = (row) => {
 		setEditMod(true);
 		formRef.current.setFieldValue('service', { value: row.service._id, label: row.service.description });
 		formRef.current.setData(row);
 	};
-
-	useEffect(() => {
-		dispatch(Services());
-	}, []);
 
 	useEffect(() => {
 		if (procedure.success == true) {
@@ -40,8 +40,7 @@ const Procedure = () => {
 		}
 	}, [procedure.success, procedure.error]);
 
-	const handleSubmit = async (data, { reset }) => {
-		console.log(data);
+	const handleSubmit = async (data) => {
 		try {
 			const schema = Yup.object().shape({
 				thumbnails: Yup.array().max(3, 'Limite de 5 fotos'),

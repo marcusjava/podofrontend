@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import Table from './Table';
 import { FileUpload, Input, CheckBox, Select } from '../../components/common/Form';
 import { useSelector, useDispatch } from 'react-redux';
-import { register, getUsers, updateUser } from '../../redux/actions/userActions';
+import { register, updateUser } from '../../redux/actions/userActions';
 
 const User = () => {
 	const [editMod, setEditMode] = useState(false);
@@ -30,7 +30,7 @@ const User = () => {
 		}
 	}, [user.success, user.error]);
 
-	const saveData = async (data, reset) => {
+	const saveData = async (data) => {
 		try {
 			const schema = Yup.object().shape({
 				name: Yup.string().required('Nome obrigatorio'),
@@ -49,27 +49,6 @@ const User = () => {
 			});
 			await schema.validate(data, { abortEarly: false });
 			dispatch(register(data));
-			// axios
-			// 	.post('/users/register', sendData)
-			// 	.then(response => {
-			// 		console.log(response);
-			// 		if (response.status == '201') {
-			// 			toastr.success('Usuario criado com sucesso');
-			// 			reset();
-			// 			setEditMode(false);
-			// 			formRef.current.setErrors({});
-			// 		}
-			// 	})
-			// 	.catch(error => {
-			// 		if (error.response.data.path === 'cpf') {
-			// 			formRef.current.setFieldError('cpf', error.response.data.message);
-			// 			toastr.error(error.response.data.message);
-			// 		}
-			// 		if (error.response.data.email) {
-			// 			formRef.current.setFieldError('email', error.response.data.email);
-			// 			toastr.error(error.response.data.email);
-			// 		}
-			// 	});
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
@@ -81,7 +60,7 @@ const User = () => {
 		}
 	};
 
-	const updateData = async (data, reset) => {
+	const updateData = async (data) => {
 		try {
 			const schema = Yup.object().shape({
 				name: Yup.string().required('Nome obrigatorio'),
@@ -170,8 +149,8 @@ const User = () => {
 							style={{ width: '180px', marginRight: '25px' }}
 							placeholder="Ex x.xxx.xxx-x"
 						/>
-						<CheckBox type="checkbox" name="role.Administrador" label="Administrador" />
-						<CheckBox type="checkbox" name="role.Usuario" label="Usuario" />
+						<CheckBox name="role.Administrador" label="Administrador" />
+						<CheckBox name="role.Usuario" label="Usuario" />
 					</Col>
 				</Row>
 				<Row>
@@ -225,7 +204,9 @@ const User = () => {
 						<Button type="submit" variant="primary">
 							{editMod ? 'Atualizar' : 'Salvar'}
 						</Button>
-						<Button variant="danger">Cancela</Button>
+						<Button variant="danger" onClick={() => window.location.reload()}>
+							Cancelar
+						</Button>
 					</Col>
 					<Col md={6}></Col>
 				</Row>

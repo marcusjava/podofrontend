@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Badge, Row, Col, Button } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import { consults, setConsult } from '../../redux/actions/consultActions';
-import DatePicker from 'react-datepicker';
+import { Badge, Button } from 'react-bootstrap';
+import { consults } from '../../redux/actions/consultActions';
+import DatePicker, { registerLocale } from 'react-datepicker';
 import { IoIosSearch } from 'react-icons/io';
+import { FaBriefcaseMedical } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
-import DateFilter from './DateFilter';
-import { FaBold } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import EditConsult from './EditConsult';
+import br from 'date-fns/locale/pt-BR';
+import './styles.css';
 
-const Table = ({ rowSelect }) => {
+registerLocale('pt-br', br);
+
+const Table = ({ data }) => {
 	const dispatch = useDispatch();
 
 	const [dateI, setDateI] = useState(undefined);
 	const [dateF, setDateF] = useState(undefined);
 	const [client, setClient] = useState('');
-	const [contact, setContact] = useState('');
-
-	const { items } = useSelector(state => state.consult.consults);
-
-	useEffect(() => {
-		dispatch(consults());
-	}, []);
 
 	const proceduresFormat = (cell, row) => {
 		return (
@@ -39,12 +37,26 @@ const Table = ({ rowSelect }) => {
 		);
 	};
 
+	const typeFormat = (cell, row) => {
+		return (
+			<div>
+				{cell.value == 0 ? (
+					<Badge variant="primary">Agendada</Badge>
+				) : cell.value == 1 ? (
+					<Badge variant="success">Retorno</Badge>
+				) : (
+					<Badge variant="danger">Urgência</Badge>
+				)}
+			</div>
+		);
+	};
+
 	const statusFormat = (cell, row) => {
 		return (
 			<div>
-				{cell == 0 ? (
+				{cell.value == 0 ? (
 					<Badge variant="primary">Marcada</Badge>
-				) : cell == 1 ? (
+				) : cell.value == 1 ? (
 					<Badge variant="success">Realizada</Badge>
 				) : (
 					<Badge variant="danger">Cancelada</Badge>
@@ -53,14 +65,25 @@ const Table = ({ rowSelect }) => {
 		);
 	};
 
-	const filterDateHandle = e => {
+	const actionsFormat = (cell, row) => {
+		return (
+			<div className="list-inline">
+				<Link to={`/inicio/consulta/${row.id}`}>
+					<FaBriefcaseMedical />
+				</Link>
+				<EditConsult initial={row} />
+			</div>
+		);
+	};
+
+	const filterDateHandle = (e) => {
 		e.preventDefault();
 		const start = dateI && dayjs(dateI).format('YYYY-MM-DDTHH:mm:ss.sssZ');
 		const end = dateF && dayjs(dateF).format('YYYY-MM-DDTHH:mm:ss.sssZ');
 		dispatch(consults(start, end));
 	};
 
-	const filterClientChange = e => {
+	const filterClientChange = (e) => {
 		setClient(e.target.value);
 		const start = dateI && dayjs(dateI).format('YYYY-MM-DDTHH:mm:ss.sssZ');
 		const end = dateF && dayjs(dateF).format('YYYY-MM-DDTHH:mm:ss.sssZ');
@@ -77,23 +100,25 @@ const Table = ({ rowSelect }) => {
 			<DatePicker
 				placeholderText="Data Inicial"
 				selected={dateI}
-				onChange={date => setDateI(date)}
+				onChange={(date) => setDateI(date)}
 				fixedHeight
 				className="only-hour"
 				name="dateI"
 				isClearable={true}
 				dateFormat="dd/MM/yyyy"
+				locale="pt-br"
 			/>
 
 			<DatePicker
 				placeholderText="Data Final"
 				selected={dateF}
-				onChange={date => setDateF(date)}
+				onChange={(date) => setDateF(date)}
 				fixedHeight
 				className="only-hour"
 				name="dateF"
 				isClearable={true}
 				dateFormat="dd/MM/yyyy"
+				locale="pt-br"
 			/>
 			<Button type="button" size="sm" onClick={filterDateHandle}>
 				<IoIosSearch />
@@ -101,13 +126,13 @@ const Table = ({ rowSelect }) => {
 		</div>
 	);
 
-	const handleDateChange = e => {
+	const handleDateChange = (e) => {
 		console.log(e.target.value);
 	};
 
 	return (
 		<>
-			<BootstrapTable data={items} striped hover version="4" pagination>
+			<BootstrapTable data={data} striped hover version="4" pagination>
 				<TableHeaderColumn isKey dataField="id" hidden>
 					Id
 				</TableHeaderColumn>
@@ -115,11 +140,7 @@ const Table = ({ rowSelect }) => {
 					dataField="date"
 					width="300"
 					dataFormat={(cell, row) => (
-						<p className="font-weight-bold">
-							{dayjs(cell)
-								.format('DD/MM/YYYY HH:mm')
-								.toString()}
-						</p>
+						<p className="font-weight-bold">{dayjs(cell).format('DD/MM/YYYY HH:mm').toString()}</p>
 					)}
 				>
 					Data
@@ -145,13 +166,15 @@ const Table = ({ rowSelect }) => {
 				</TableHeaderColumn>
 
 				<TableHeaderColumn dataField="observations">Observações</TableHeaderColumn>
-				<TableHeaderColumn dataField="type" width={120}>
+				<TableHeaderColumn dataField="type_consult" width="120" dataFormat={typeFormat}>
 					Tipo consulta
 				</TableHeaderColumn>
 				<TableHeaderColumn dataField="status" dataFormat={statusFormat} width="100">
 					Status
 				</TableHeaderColumn>
-				<TableHeaderColumn width="90">Ações</TableHeaderColumn>
+				<TableHeaderColumn width="90" dataFormat={actionsFormat}>
+					Ações
+				</TableHeaderColumn>
 			</BootstrapTable>
 		</>
 	);

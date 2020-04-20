@@ -10,7 +10,7 @@ import {
 
 const initialState = {
 	consults: {
-		loading: true,
+		loading: false,
 		success: false,
 		error: {},
 		items: [],
@@ -82,7 +82,7 @@ export default (state = initialState, action) => {
 				consults: {
 					...state.consults,
 					items: action.payload,
-					options: action.payload.map(option => ({ label: option.name, value: option.id })),
+					options: action.payload.map((option) => ({ label: option.name, value: option.id })),
 					loading: false,
 					success: true,
 				},

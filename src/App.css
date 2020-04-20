@@ -11,10 +11,9 @@ body,
 	height: 100%;
 }
 
-
 @font-face {
 	font-family: 'Dancing Script';
-	src: url("./fonts/DancingScript-VariableFont_wght.ttf");
+	src: url('./fonts/DancingScript-VariableFont_wght.ttf');
 }
 
 body {
@@ -36,5 +35,4 @@ body {
 	font-family: 'Dancing Script';
 	font-size: 25px;
 	font-weight: bold;
-
 }
