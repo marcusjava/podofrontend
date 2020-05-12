@@ -71,7 +71,11 @@ export default (state = initialState, action) => {
 				clients: {
 					...state.clients,
 					items: action.payload,
-					options: action.payload.map(option => ({ label: option.name, value: option.id })),
+					options: action.payload.map((option) => ({
+						label: option.name,
+						value: option.id,
+						avatar: option.avatar_url,
+					})),
 					loading: false,
 					success: true,
 				},

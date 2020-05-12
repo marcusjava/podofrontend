@@ -19,7 +19,6 @@ const initialState = {
 	consult: {
 		loading: false,
 		success: false,
-		showModal: false,
 		error: {},
 		item: {},
 	},

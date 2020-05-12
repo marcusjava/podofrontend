@@ -1,6 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
+import 'react-circular-progressbar/dist/styles.css';
+import 'react-json-inspector/json-inspector.css';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './pages/Login';
@@ -14,6 +16,7 @@ import './App.css';
 import axios from 'axios';
 import Messages from './components/common/Messages';
 import { toastr } from 'react-redux-toastr';
+import FichaConsult from './pages/Consult/FichaConsult';
 
 if (localStorage.getItem('token')) {
 	const token = localStorage.getItem('token');
@@ -32,7 +35,7 @@ axios.defaults.baseURL = 'http://localhost:3001/api';
 //axios.defaults.headers.common['Authorization'] = AUTH_TOKEN
 
 axios.interceptors.request.use(
-	config => {
+	(config) => {
 		if (!config.url.endsWith('/login')) {
 			console.log('Entrando no request interceptor...');
 			const token = localStorage.getItem('token');
@@ -45,17 +48,17 @@ axios.interceptors.request.use(
 		}
 		return config;
 	},
-	error => {
+	(error) => {
 		return Promise.reject(error);
 	}
 );
 
 axios.interceptors.response.use(
-	response => {
+	(response) => {
 		console.log('response interceptor', response);
 		return response;
 	},
-	error => {
+	(error) => {
 		if (error.response.status === 401) {
 			toastr.error('Sessão expirada faça login novamente');
 			store.dispatch(logout());
@@ -74,6 +77,7 @@ function App() {
 					<Switch>
 						<Route exact path="/" component={Login} />
 						<Route path="/inicio" component={DefaultLayout} />
+						<Route path="/ficha/:id" component={FichaConsult} />
 					</Switch>
 				</div>
 			</Router>

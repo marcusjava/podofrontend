@@ -3,21 +3,21 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
-import { format } from 'date-fns';
+import { toastr } from 'react-redux-toastr';
 import { Row, Col, Button, Modal } from 'react-bootstrap';
-import { Clients, searchClients } from '../../redux/actions/clientActions';
+import { Clients } from '../../redux/actions/clientActions';
 import { Form } from '@unform/web';
 import { DatePicker, TextArea, Select } from '../../components/common/Form';
 import * as Yup from 'yup';
-import { saveConsult } from '../../redux/actions/consultActions';
-import { Procedures, searchProcedures } from '../../redux/actions/procedureActions';
+import { consults } from '../../redux/actions/consultActions';
+import { Procedures } from '../../redux/actions/procedureActions';
 import { MdNoteAdd } from 'react-icons/md';
-import Table from './Table';
+import CustomClientOptions from '../../components/common/Form/CustomClientOptions';
+import axios from 'axios';
 
 dayjs.extend(utc);
 
 function AddConsult() {
-	const [clientSel, setClientSel] = useState({});
 	const [show, setShow] = useState(false);
 
 	const { clients } = useSelector((state) => state.client);
@@ -34,19 +34,6 @@ function AddConsult() {
 		dispatch(Procedures());
 	}, []);
 
-	useEffect(() => {
-		if (success === true) {
-			formRef.current.setErrors({});
-			formRef.current.reset();
-			setShow(false);
-		}
-		if (error === false) {
-			const errorMessages = {};
-			errorMessages[error.path] = error.message;
-			formRef.current.setErrors(errorMessages);
-		}
-	}, [success, error]);
-
 	const handleSubmit = async (data, { reset }) => {
 		try {
 			const schema = Yup.object().shape({
@@ -59,13 +46,27 @@ function AddConsult() {
 			const sendData = {
 				date: dayjs(data.date).format('YYYY-MM-DDTHH:mm:ss.sssZ'),
 				client: data.client.value,
-				procedures: data.procedures,
+				procedures: data.procedures.map((procedure) => procedure.value),
 				type_consult: data.type_consult,
 				observations: data.observations,
 				status: { value: '0', label: 'Marcada' },
 			};
-
-			dispatch(saveConsult(sendData));
+			try {
+				const response = await axios.post('/consults', sendData);
+				if (response.status === 201) {
+					dispatch(consults());
+					formRef.current.setErrors({});
+					formRef.current.reset();
+					setShow(false);
+					toastr.success('Consulta marcada com sucesso');
+				}
+			} catch (error) {
+				const errorMessages = {};
+				const { data } = error.response;
+				errorMessages[data.path] = data.message;
+				formRef.current.setErrors(errorMessages);
+				toastr.error('Já exsite uma consulta marcada para este horario');
+			}
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
@@ -78,27 +79,12 @@ function AddConsult() {
 	};
 
 	const clientInputChange = (input) => {
-		if (input) {
-			dispatch(searchClients(input));
+		if (input.length >= 3) {
+			dispatch(Clients({ name: input }));
 		}
-	};
-
-	const procedInputChange = (input) => {
-		if (input) {
-			dispatch(searchProcedures(input));
-		} else {
-			dispatch(Procedures());
+		if (input.length == 0) {
+			dispatch(Clients());
 		}
-	};
-
-	const onDateChanger = (date) => {
-		console.log(date);
-	};
-
-	const clientSelectChange = (e) => {
-		const selected = clients.items.filter((client) => client.id == e.value);
-		console.log(selected);
-		setClientSel(selected);
 	};
 
 	return (
@@ -115,11 +101,7 @@ function AddConsult() {
 					<Form ref={formRef} onSubmit={handleSubmit}>
 						<Row>
 							<Col md={6}>
-								<DatePicker
-									placeholderText="Data/hora"
-									name="date"
-									onSelect={(date) => onDateChanger(date)}
-								/>
+								<DatePicker placeholderText="Data/hora" name="date" />
 							</Col>
 						</Row>
 						<Row>
@@ -127,21 +109,16 @@ function AddConsult() {
 								<Select
 									label="Cliente"
 									name="client"
-									onChange={(e) => clientSelectChange(e)}
 									options={clients.options}
 									onInputChange={(input) => clientInputChange(input)}
+									components={{ Option: CustomClientOptions }}
 								/>
 							</Col>
 						</Row>
+
 						<Row>
 							<Col md={6}>
-								<Select
-									label="Procedimentos"
-									isMulti
-									name="procedures"
-									options={procedures.options}
-									onInputChange={(input) => procedInputChange(input)}
-								/>
+								<Select label="Procedimentos" isMulti name="procedures" options={procedures.options} />
 							</Col>
 						</Row>
 						<Row>

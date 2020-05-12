@@ -9,9 +9,8 @@ const FileUpload = ({ name, ...rest }) => {
 	const { fieldName, registerField, defaultValue } = useField(name);
 	const [preview, setPreview] = useState(defaultValue);
 
-	const handlePreview = useCallback(e => {
+	const handlePreview = useCallback((e) => {
 		const file = e.target.files[0];
-		console.log(preview);
 		if (!file) {
 			setPreview(null);
 		}
@@ -28,11 +27,11 @@ const FileUpload = ({ name, ...rest }) => {
 			name: fieldName,
 			ref: inputRef.current,
 			path: 'files[0]',
-			clearValue: ref => {
+			clearValue: (ref) => {
 				ref.value = '';
 				setPreview(null);
 			},
-			setValue: value => {
+			setValue: (value) => {
 				setPreview(value);
 			},
 		});

@@ -1,89 +1,124 @@
-import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
-import { Row, Col, Button, Image } from 'react-bootstrap';
-import { DatePicker, TextArea, Select, CheckBox, Input } from '../../components/common/Form';
+import { Row, Col, Button, Image, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { DatePicker, TextArea, Select, CheckBox, Input, FileMultiUpload } from '../../components/common/Form';
 import * as Yup from 'yup';
-import { updateConsult } from '../../redux/actions/consultActions';
-import { Procedures, searchProcedures } from '../../redux/actions/procedureActions';
-import { getConsult } from '../../redux/actions/consultActions';
+import { Procedures } from '../../redux/actions/procedureActions';
 import { useParams } from 'react-router-dom';
 import { Scope } from '@unform/core';
 import { Form } from '@unform/web';
-import { MdAddBox } from 'react-icons/md';
+import { parseISO } from 'date-fns';
 import './styles.css';
 import CalosJSON from './CalosJSON';
 import Spinner from '../../components/common/Spinner';
-
+import axios from 'axios';
+import { toastr } from 'react-redux-toastr';
+import PhotoList from '../../components/consult/PhotoList';
+import { Link } from 'react-router-dom';
+import { FaPrint } from 'react-icons/fa';
+import { useHistory } from 'react-router-dom';
 dayjs.extend(utc);
 
 const NOMENCLATURA_DEDOS_PE = [
-	{ label: 'Pé direito ', value: 'Pé direito ' },
-	{ label: 'Halux direito ', value: 'Halux direito ' },
-	{ label: 'Arteiro 1 direito ', value: 'Arteiro 1 direito ' },
-	{ label: 'Arteiro 2 direito ', value: 'Arteiro 2 direito ' },
-	{ label: 'Arteiro 3 direito ', value: 'Arteiro 3 direito ' },
-	{ label: 'Arteiro 4 direito ', value: 'Arteiro 4 direito ' },
-	{ label: 'Pé esquerdo ', value: 'Pé esquerdo ' },
-	{ label: 'Halux esquerdo ', value: 'Halux esquerdo ' },
-	{ label: 'Arteiro 1 esquerdo ', value: 'Arteiro 1 esquerdo ' },
-	{ label: 'Arteiro 2 esquerdo ', value: 'Arteiro 2 esquerdo ' },
-	{ label: 'Arteiro 3 esquerdo ', value: 'Arteiro 3 esquerdo ' },
-	{ label: 'Arteiro 4 esquerdo ', value: 'Arteiro 4 esquerdo ' },
+	{ label: 'Pé direito ', value: 0 },
+	{ label: 'Halux direito ', value: 1 },
+	{ label: 'Arteiro 1 direito ', value: 2 },
+	{ label: 'Arteiro 2 direito ', value: 3 },
+	{ label: 'Arteiro 3 direito ', value: 4 },
+	{ label: 'Arteiro 4 direito ', value: 5 },
+	{ label: 'Pé esquerdo ', value: 6 },
+	{ label: 'Halux esquerdo ', value: 7 },
+	{ label: 'Arteiro 1 esquerdo ', value: 8 },
+	{ label: 'Arteiro 2 esquerdo ', value: 9 },
+	{ label: 'Arteiro 3 esquerdo ', value: 10 },
+	{ label: 'Arteiro 4 esquerdo ', value: 11 },
 ];
 
 const TIPOS_DE_PES = [
-	{ label: 'Pé Normal direito ', value: 'Pé Normal direito ' },
-	{ label: 'Pé Normal esquerdo ', value: 'Pé Normal esquerdo ' },
-	{ label: 'Pé Cavo direito ', value: 'Pé Cavo direito ' },
-	{ label: 'Pé Cavo esquerdo ', value: 'Pé Cavo esquerdo ' },
-	{ label: 'Pé Plano direito ', value: 'Pé Plano direito ' },
-	{ label: 'Pé Plano esquerdo ', value: 'Pé Plano esquerdo ' },
+	{ label: 'Pé Normal direito ', value: 0 },
+	{ label: 'Pé Normal esquerdo ', value: 1 },
+	{ label: 'Pé Cavo direito ', value: 2 },
+	{ label: 'Pé Cavo esquerdo ', value: 3 },
+	{ label: 'Pé Plano direito ', value: 4 },
+	{ label: 'Pé Plano esquerdo ', value: 5 },
 ];
 
 const TIPOS_PISADA_PES = [
-	{ label: 'Pé Pronado direito ', value: 'Pé Pronado direito ' },
-	{ label: 'Pé Pronado esquerdo ', value: 'Pé Pronado esquerdo ' },
-	{ label: 'Pé Neutro direito ', value: 'Pé Neutro direito ' },
-	{ label: 'Pé Neutro esquerdo ', value: 'Pé Neutro esquerdo ' },
-	{ label: 'Pé Supinado direito ', value: 'Pé Supinado direito ' },
-	{ label: 'Pé Supinado esquerdo ', value: 'Pé Supinado esquerdo ' },
+	{ label: 'Pé Pronado direito ', value: 0 },
+	{ label: 'Pé Pronado esquerdo ', value: 1 },
+	{ label: 'Pé Neutro direito ', value: 2 },
+	{ label: 'Pé Neutro esquerdo ', value: 3 },
+	{ label: 'Pé Supinado direito ', value: 4 },
+	{ label: 'Pé Supinado esquerdo ', value: 5 },
+];
+
+const TIPOS_JOELHOS = [
+	{ label: 'Joelho Normal ', value: 'Joelho Normal ' },
+	{ label: 'Joelho Valgo ', value: 'Joelho Valgo ' },
+	{ label: 'Joelho Varo ', value: 'Joelho Varo' },
+];
+
+const TIPOS_DEDOS = [
+	{ label: 'Dedo Egipcio', value: 'Dedo Egipcio ' },
+	{ label: 'Dedo Romano ', value: 'Dedo Romano ' },
+	{ label: 'Dedo Grego ', value: 'Dedo Grego' },
+	{ label: 'Dedo Alemão ', value: 'Dedo Alemão' },
+	{ label: 'Dedo Celtico ', value: 'Dedo Celtico' },
 ];
 
 const Consult = () => {
 	const formRef = useRef(null);
 	const dispatch = useDispatch();
 	const { id } = useParams();
+	const history = useHistory();
+	const [item, setItem] = useState({});
+	const [photos, setPhotos] = useState([]);
 
 	const { options } = useSelector((state) => state.procedure.procedures);
-	const { item, success, loading } = useSelector((state) => state.consult.consult);
 
 	useEffect(() => {
-		dispatch(getConsult(id));
 		dispatch(Procedures());
+		async function getConsult() {
+			const response = await axios.get(`/consults/${id}`);
+			setItem(response.data);
+		}
+
+		getConsult();
+	}, [dispatch, id]);
+
+	async function getPhotos() {
+		const response = await axios.get(`/photos/${id}`);
+		setPhotos(response.data);
+	}
+
+	useEffect(() => {
+		getPhotos();
 	}, []);
 
-	const setData = () => {
-		formRef.current.setFieldValue('id', item.id);
-		//formRef.current.setFieldValue('date', item.date);
-		formRef.current.setFieldValue(
-			'procedures',
-			item.procedures.map((procedure) => ({ label: procedure.name, value: procedure._id }))
-		);
-		formRef.current.setFieldValue('type_consult', item.type_consult);
-		formRef.current.setFieldValue('observations', item.observations);
+	const handleUpload = async (file) => {
+		const fileData = new FormData();
+		fileData.append('photo', file);
+		try {
+			const response = await axios.post(`/photos/${id}`, fileData);
+			setPhotos([...photos, response.data]);
+		} catch (error) {
+			console.log(error.response.data);
+		}
 	};
 
-	useEffect(() => {
-		if (Object.entries(item).length > 0) {
-			setData();
+	const handleDeletePhoto = async (e, id) => {
+		e.preventDefault();
+		try {
+			await axios.delete(`/photos/${id}`);
+			setPhotos(photos.filter((photo) => photo._id !== id));
+		} catch (error) {
+			console.log(error);
 		}
-	}, [item]);
+	};
 
-	const handleSubmit = async (data, { reset }) => {
-		console.log(data);
+	const handleSubmit = async (data) => {
 		try {
 			const schema = Yup.object().shape({
 				date: Yup.string().required('Informe a data da consulta'),
@@ -91,15 +126,34 @@ const Consult = () => {
 				type_consult: Yup.string().ensure().required('Informe o tipo de consulta'),
 			});
 			await schema.validate(data, { abortEarly: false });
+
 			const sendData = {
 				date: dayjs(data.date).format('YYYY-MM-DD HH:mm:ss'),
-				procedures: data.procedures,
+				client: data.client,
+				procedures: data.procedures.map((procedure) => procedure.value),
 				type_consult: data.type_consult,
+				observations: data.observations,
 				anamnese: data.anamnese,
 				status: { value: '1', label: 'Realizada' },
 			};
+			try {
+				const dialog = window.confirm('Tem certeza que deseja encerrar a consulta?');
 
-			dispatch(updateConsult(sendData));
+				if (dialog === true) {
+					data.files.forEach(handleUpload);
+					const response = await axios.put(`/consults/${data._id}`, sendData);
+					if (response.status === 200) {
+						console.log(response.status);
+						toastr.success('Consulta atualizada com sucesso');
+						history.push('/inicio/principal');
+					}
+				}
+			} catch (error) {
+				const { data } = error.response;
+				const errorMessages = {};
+				errorMessages[data.path] = data.message;
+				formRef.current.setErrors(errorMessages);
+			}
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
@@ -111,13 +165,43 @@ const Consult = () => {
 		}
 	};
 
-	return (
-		<Form ref={formRef} onSubmit={handleSubmit}>
-			<Input type="hidden" name="id" />
+	return Object.entries(item).length === 0 ? (
+		<Spinner />
+	) : (
+		<Form
+			ref={formRef}
+			initialData={{
+				_id: item._id,
+				date: parseISO(item.date),
+				client: item.client._id,
+				procedures: item.procedures.map((procedure) => ({
+					value: procedure._id,
+					label: procedure.name,
+				})),
+				anamnese: item.anamnese,
+				type_consult: item.type_consult,
+				status: item.status,
+				observations: item.observations,
+			}}
+			onSubmit={handleSubmit}
+		>
+			<Input type="hidden" name="_id" />
+			<Input type="hidden" name="client" />
 			<Row className="justify-content-center mb-4">
 				<Col md={4} className="text-center">
 					<Image className="rounded-img mt-2" roundedCircle src={item.client && item.client.avatar_url} />
 					<p className="title text-center">{item.client && item.client.name}</p>
+				</Col>
+			</Row>
+			<Row>
+				<Col className="text-right">
+					{item.status.value === '1' && (
+						<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit">Imprimir Ficha</Tooltip>}>
+							<Link to={`/ficha/${item.id}`}>
+								<FaPrint size={30} />
+							</Link>
+						</OverlayTrigger>
+					)}
 				</Col>
 			</Row>
 			<Row>
@@ -148,8 +232,29 @@ const Consult = () => {
 					<TextArea rows={10} col={15} label="Observações" name="observations" />
 				</Col>
 			</Row>
+
+			<Row>
+				<Col md={12}>
+					<FileMultiUpload name="files" />
+				</Col>
+			</Row>
+			<Row>
+				<Col md={12}>
+					{photos.length === 0 ? (
+						<p className="text-center text-muted">Sem fotos</p>
+					) : (
+						<PhotoList photos={photos} handleDeletePhoto={handleDeletePhoto} />
+					)}
+				</Col>
+			</Row>
+
 			<div className="border border-primary bg-light p-3" style={{ marginTop: '60px' }}>
 				<Scope path="anamnese">
+					<Row>
+						<Col md={12}>
+							<TextArea label="Descrição Procedimentos" name="desc_proc" rows={10} col={15} />
+						</Col>
+					</Row>
 					<Row className="my-3">
 						<Col md={3} className="form-inline">
 							<div className="form-group">
@@ -184,7 +289,13 @@ const Consult = () => {
 						</Col>
 
 						<Col md={2} className="form-inline">
-							<Input name="calcado.num" label="Num calçado" className="mr-3" style={{ width: '40px' }} />
+							<Input
+								name="calcado.num"
+								label="Num calçado"
+								className="mr-3"
+								style={{ width: '40px' }}
+								maxLength={2}
+							/>
 						</Col>
 						<Col md={2}>
 							<Select
@@ -212,21 +323,31 @@ const Consult = () => {
 					<Row className="my-3">
 						<Col md={6} className="form-inline">
 							<CheckBox name="medicamento.option" label="Medicamento?" />
-							<Input name="medicamento.description" label="Quais?" style={{ width: '500px' }} />
+							<Input
+								name="medicamento.description"
+								label="Quais?"
+								style={{ width: '500px' }}
+								maxLength={50}
+							/>
 						</Col>
 						<Col md={6} className="form-inline">
 							<CheckBox name="alergia.option" label="Alergia?" />
-							<Input name="alergia.description" label="Quais?" style={{ width: '500px' }} />
+							<Input
+								name="alergia.description"
+								label="Quais?"
+								style={{ width: '500px' }}
+								maxLength={50}
+							/>
 						</Col>
 					</Row>
 					<Row className="my-3">
 						<Col md={6} className="form-inline">
 							<CheckBox name="doenca.option" label="Doença?" />
-							<Input name="doenca.description" label="Quais?" style={{ width: '500px' }} />
+							<Input name="doenca.description" label="Quais?" style={{ width: '500px' }} maxLength={50} />
 						</Col>
 						<Col md={6} className="form-inline">
 							<CheckBox name="diabetico" label="Diabetico?" />
-							<CheckBox name="diabetico_family" label="Diabetico familia?" />
+							<CheckBox name="diabetico_familia" label="Diabetico familia?" />
 							<CheckBox name="hipertensao" label="Hipertenso?" />
 							<CheckBox name="cardiopata" label="Cardiopata?" />
 						</Col>
@@ -239,7 +360,7 @@ const Consult = () => {
 						</Col>
 						<Col md={6} className="form-inline">
 							<CheckBox name="grav_lact" label="Gravidez/Lactação?" />
-							<Input name="outros" label="Outros?" style={{ width: '500px' }} />
+							<Input name="outros" label="Outros?" style={{ width: '500px' }} maxLength={50} />
 						</Col>
 					</Row>
 					<Row className="my-3">
@@ -314,7 +435,7 @@ const Consult = () => {
 								<Select
 									label="Unhas em Torquês"
 									isMulti
-									name="normal"
+									name="torques"
 									options={NOMENCLATURA_DEDOS_PE}
 								/>
 							</Col>
@@ -627,19 +748,14 @@ const Consult = () => {
 									<Image src={require('../../images/lesoes_ortopedicas/tipos_joelhos.jpg')} />
 								</div>
 
-								<Select
-									label="Tipos de Joelhos"
-									isMulti
-									name="tipos_joelho"
-									options={TIPOS_PISADA_PES}
-								/>
+								<Select label="Tipos de Joelhos" name="tipos_joelho" options={TIPOS_JOELHOS} />
 							</Col>
 							<Col md={3} className="text-center">
 								<div className="mb-2">
 									<Image src={require('../../images/lesoes_ortopedicas/tipos_dedos_pe.jpg')} />
 								</div>
 
-								<Select label="Tipos de Dedos" isMulti name="tipos_dedos" options={TIPOS_PISADA_PES} />
+								<Select label="Tipos de Dedos" name="tipos_dedos" options={TIPOS_DEDOS} />
 							</Col>
 						</Row>
 						<Row>
@@ -656,23 +772,23 @@ const Consult = () => {
 					<Row>
 						<Scope path="exame_fisico">
 							<Col md={3}>
-								<Input label="Monofilamento" name="monofilamento" />
+								<Input label="Monofilamento" name="monofilamento" maxLength={20} />
 							</Col>
 							<Col md={3}>
-								<Input label="Diapasão" name="diapasao" />
+								<Input label="Diapasão" name="diapasao" maxLength={20} />
 							</Col>
 							<Col md={3}>
-								<Input label="Digitopressão" name="digitopressao" />
+								<Input label="Digitopressão" name="digitopressao" maxLength={20} />
 							</Col>
 							<Col md={3}>
-								<Input label="Pulsos" name="pulsos" />
+								<Input label="Pulsos" name="pulsos" maxLength={10} />
 							</Col>
 						</Scope>
 					</Row>
 				</Scope>
 			</div>
 			<Row>
-				<Col md={12} className="text-right">
+				<Col md={12} className="text-right mt-4">
 					<Button type="submit" variant="primary">
 						Salvar
 					</Button>

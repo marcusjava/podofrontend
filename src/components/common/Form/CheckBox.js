@@ -11,11 +11,17 @@ const CheckBox = ({ name, info, label, disabled, ...rest }) => {
 			ref: inputRef.current,
 			path: 'checked',
 		});
-	}, [fieldName, registerField]);
+	}, [fieldName, registerField, defaultValue]);
 	return (
 		<div className="form-check-inline">
 			<label className="form-check-label">
-				<input type="checkbox" {...rest} ref={inputRef} className="form-check-input" />
+				<input
+					type="checkbox"
+					{...rest}
+					ref={inputRef}
+					defaultChecked={defaultValue}
+					className="form-check-input"
+				/>
 				{label}
 			</label>
 		</div>

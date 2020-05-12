@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Row, Col, Button, Container } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { Input, TextArea } from '../../components/common/Form';
@@ -14,7 +14,6 @@ const Service = () => {
 	const formRef = useRef(null);
 
 	async function loadServices() {
-		console.log('recebendo dados da API');
 		const result = await axios.get('/services');
 		setServices(result.data);
 	}
@@ -23,7 +22,7 @@ const Service = () => {
 		loadServices();
 	}, []);
 
-	const saveData = async (data, reset) => {
+	const saveData = async (data) => {
 		try {
 			const schema = Yup.object().shape({
 				description: Yup.string().required('Descrição obrigatoria'),
@@ -32,15 +31,15 @@ const Service = () => {
 			axios
 				.post('/services', data)
 				.then((response) => {
-					if (response.status === '201') {
-						toastr.success('Serviço criado com sucesso');
-						reset();
-						setEditMod(false);
-						loadServices();
-						formRef.current.setErrors({});
-					}
+					toastr.success('Serviço criado com sucesso');
+					formRef.current.reset();
+					setEditMod(false);
+					formRef.current.setErrors({});
+					loadServices();
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => {
+					console.log(error);
+				});
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
@@ -52,7 +51,7 @@ const Service = () => {
 		}
 	};
 
-	const updateData = async (data, reset) => {
+	const updateData = async (data) => {
 		try {
 			const schema = Yup.object().shape({
 				description: Yup.string().required('Descrição obrigatoria'),
@@ -62,12 +61,15 @@ const Service = () => {
 				.put(`/services/${data._id}`, data)
 				.then((response) => {
 					toastr.success('Serviço criado com sucesso');
-					reset();
+					formRef.current.reset();
 					setEditMod(false);
 					loadServices();
 					formRef.current.setErrors({});
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => {
+					const { data } = error.response;
+					console.log(data);
+				});
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
@@ -79,12 +81,11 @@ const Service = () => {
 		}
 	};
 
-	const handleSubmit = async (data, { reset }) => {
-		console.log(data);
+	const handleSubmit = (data) => {
 		if (editMod) {
-			updateData(data, reset);
+			updateData(data);
 		} else {
-			saveData(data, reset);
+			saveData(data);
 		}
 	};
 

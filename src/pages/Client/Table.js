@@ -1,5 +1,6 @@
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import classnames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { Clients } from '../../redux/actions/clientActions';
@@ -18,9 +19,11 @@ const Table = ({ rowSelect, data }) => {
 	const actionFormat = (cell, row) => {
 		return (
 			<div className="form-iline">
-				<Link to={`/inicio/clientes/detalhes/${row._id}`}>
-					<MdRemoveRedEye />
-				</Link>
+				<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit">Ver Cliente</Tooltip>}>
+					<Link to={`/inicio/clientes/detalhes/${row._id}`}>
+						<MdRemoveRedEye size={24} />
+					</Link>
+				</OverlayTrigger>
 			</div>
 		);
 	};
@@ -41,7 +44,7 @@ const Table = ({ rowSelect, data }) => {
 		);
 	};
 
-	const handleNameChange = e => {
+	const handleNameChange = (e) => {
 		const { value } = e.target;
 		if (value) {
 			dispatch(Clients({ name: value }));
@@ -49,7 +52,7 @@ const Table = ({ rowSelect, data }) => {
 			dispatch(Clients());
 		}
 	};
-	const handleEmailChange = e => {
+	const handleEmailChange = (e) => {
 		const { value } = e.target;
 		if (value) {
 			dispatch(Clients({ email: value }));
@@ -58,7 +61,7 @@ const Table = ({ rowSelect, data }) => {
 		}
 	};
 
-	const handleCpfChange = e => {
+	const handleCpfChange = (e) => {
 		const { value } = e.target;
 		if (value) {
 			dispatch(Clients({ cpf: value }));
@@ -67,7 +70,7 @@ const Table = ({ rowSelect, data }) => {
 		}
 	};
 
-	const handleContactChange = e => {
+	const handleContactChange = (e) => {
 		const { value } = e.target;
 		if (value) {
 			dispatch(Clients({ contact: value }));
@@ -84,12 +87,12 @@ const Table = ({ rowSelect, data }) => {
 			<TableHeaderColumn dataField="avatar_url" dataFormat={pictureFormat} width="90">
 				Foto
 			</TableHeaderColumn>
-			<TableHeaderColumn dataField="name" dataSort={true}>
+			<TableHeaderColumn dataField="name">
 				Nome
 				<br />
 				<input type="text" style={{ width: '120px' }} onChange={handleNameChange} />
 			</TableHeaderColumn>
-			<TableHeaderColumn dataField="email" dataSort={true}>
+			<TableHeaderColumn dataField="email">
 				Email
 				<br />
 				<input type="text" style={{ width: '120px' }} onChange={handleEmailChange} />
@@ -97,13 +100,13 @@ const Table = ({ rowSelect, data }) => {
 			<TableHeaderColumn dataField="insta_url" dataFormat={instaFormat}>
 				Instagram
 			</TableHeaderColumn>
-			<TableHeaderColumn dataField="cpf" dataSort={true}>
+			<TableHeaderColumn dataField="cpf">
 				CPF
 				<br />
 				<input type="text" style={{ width: '120px' }} onChange={handleCpfChange} />
 			</TableHeaderColumn>
 
-			<TableHeaderColumn dataField="contact" dataSort={true}>
+			<TableHeaderColumn dataField="contact">
 				Contato
 				<br />
 				<input type="text" style={{ width: '120px' }} onChange={handleContactChange} />

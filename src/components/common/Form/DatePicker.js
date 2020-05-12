@@ -1,10 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
-import ReactDatePicker, { ReactDatePickerProps, registerLocale } from 'react-datepicker';
+import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import { useField } from '@unform/core';
 import 'react-datepicker/dist/react-datepicker.css';
 import classnames from 'classnames';
 import br from 'date-fns/locale/pt-BR';
-import { parseISO } from 'date-fns';
 
 registerLocale('pt-br', br);
 
@@ -12,7 +11,7 @@ const DatePicker = ({ name, label, ...rest }) => {
 	const datepickerRef = useRef(null);
 
 	const { fieldName, registerField, defaultValue, error } = useField(name);
-	const [date, setDate] = useState(parseISO(defaultValue) || null);
+	const [date, setDate] = useState(defaultValue || null);
 
 	useEffect(() => {
 		registerField({

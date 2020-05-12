@@ -1,24 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Image } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getClient, Clients } from '../../redux/actions/clientActions';
 import dayjs from 'dayjs';
 import './styles.css';
 import Table from '../Consult/Table';
+import Spinner from '../../components/common/Spinner';
+import axios from 'axios';
 
 const ClientDetail = () => {
-	const dispatch = useDispatch();
-	const { item } = useSelector((state) => state.client.client);
 	const { id } = useParams();
 
-	useEffect(() => {
-		dispatch(getClient(id));
-		dispatch(Clients());
-	}, [dispatch, id]);
+	const [item, setItem] = useState({});
 
-	return (
+	useEffect(() => {
+		async function getClient() {
+			const response = await axios.get(`/clients/${id}`);
+			setItem(response.data);
+		}
+
+		getClient();
+	}, [id]);
+
+	return Object.entries(item).length === 0 ? (
+		<Spinner />
+	) : (
 		<>
 			<Row className="justify-content-center mb-4">
 				<Col md={4} className="text-center">
@@ -95,10 +101,16 @@ const ClientDetail = () => {
 				</Col>
 			</Row>
 			<Row className="mb-4">
-				<Col md={4}>
+				<Col md={6}>
 					<p>
-						<strong>Registrado em</strong> - {dayjs(item.createdAt).format('DD/MM/YYYY')} por{' '}
+						<strong>Criado em</strong> - {dayjs(item.createdAt).format('DD/MM/YYYY HH:mm')} por{' '}
 						{item.createdBy && item.createdBy.name}
+					</p>
+				</Col>
+				<Col md={6}>
+					<p>
+						<strong>Atualizado em</strong> - {dayjs(item.updatedAt).format('DD/MM/YYYY HH:mm')} por{' '}
+						{item.updatedBy && item.updatedBy.name}
 					</p>
 				</Col>
 			</Row>
@@ -109,7 +121,7 @@ const ClientDetail = () => {
 			</Row>
 			<Row className="mt-4">
 				<Col md={12}>
-					<Table data={item.consults} />
+					<Table client_id={item.id} />
 				</Col>
 			</Row>
 		</>

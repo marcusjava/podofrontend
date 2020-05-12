@@ -20,6 +20,7 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	color: #333;
+	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialised !important;
 }
 
@@ -35,4 +36,29 @@ body {
 	font-family: 'Dancing Script';
 	font-size: 25px;
 	font-weight: bold;
+}
+
+.tooltip-inner {
+	background-color: #fcd308;
+	color: #000000;
+}
+
+.bs-tooltip-auto[x-placement^='bottom'] .arrow::before,
+.bs-tooltip-bottom .arrow::before {
+	border-bottom-color: #fcd308;
+}
+
+.bs-tooltip-auto[x-placement^='top'] .arrow::before,
+.bs-tooltip-top .arrow::before {
+	border-top-color: #fcd308;
+}
+
+.bs-tooltip-auto[x-placement^='left'] .arrow::before,
+.bs-tooltip-left .arrow::before {
+	border-left-color: #fcd308;
+}
+
+.bs-tooltip-auto[x-placement^='right'] .arrow::before,
+.bs-tooltip-right .arrow::before {
+	border-right-color: #fcd308;
 }

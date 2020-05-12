@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import { consults } from '../../redux/actions/consultActions';
@@ -7,12 +6,12 @@ import Table from './Table';
 import AddConsult from './AddConsult';
 
 const Consults = () => {
-	const { items } = useSelector(state => state.consult.consults);
+	const { items } = useSelector((state) => state.consult.consults);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		dispatch(consults());
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<>

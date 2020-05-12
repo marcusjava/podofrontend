@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import JwPagination from 'jw-react-pagination';
 import PropTypes from 'prop-types';
 

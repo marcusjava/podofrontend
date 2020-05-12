@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, NavDropdown, FormControl, Button, Form } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Form } from 'react-bootstrap';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../../redux/actions/userActions';
@@ -9,14 +9,14 @@ import './styles.css';
 import { LinkContainer } from 'react-router-bootstrap';
 import { FaHome, FaTools, FaNewspaper, FaKey, FaUsers, FaBriefcaseMedical, FaUserShield } from 'react-icons/fa';
 import { GiMorgueFeet } from 'react-icons/gi';
-import { FiLogOut } from 'react-icons/fi';
+import { FiLogOut, FiAlertTriangle } from 'react-icons/fi';
 import InputFilter from '../../../pages/Client/InputFilter';
 
 const NavBar = () => {
 	const { credentials } = useSelector((state) => state.user.user);
 	const dispatch = useDispatch();
 	return (
-		<Navbar expand="md" variant="dark" expand="lg">
+		<Navbar variant="dark" expand="lg">
 			<Navbar.Brand href="#home">
 				<img src={Logo} alt="Logo" width="35" height="35" className="d-inline-block align-top" />
 			</Navbar.Brand>
@@ -63,6 +63,9 @@ const NavBar = () => {
 							<FaNewspaper /> Procedimentos
 						</NavDropdown.Item>
 						<NavDropdown.Divider />
+						<NavDropdown.Item as={Link} to="/inicio/administrador/logs">
+							<FiAlertTriangle /> Logs de Alterações
+						</NavDropdown.Item>
 					</NavDropdown>
 				</Nav>
 				<Form inline>

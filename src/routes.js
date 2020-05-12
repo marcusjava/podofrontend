@@ -48,6 +48,11 @@ const Consult = Loadable({
 	loading: Loading,
 });
 
+const Logs = Loadable({
+	loader: () => import('./pages/Logs'),
+	loading: Loading,
+});
+
 const routes = [
 	{ path: '/inicio/principal', name: 'Dashboard', Component: Dashboard },
 	{ path: '/inicio/consultas', name: 'Consults', Component: Consults },
@@ -58,6 +63,7 @@ const routes = [
 	{ path: '/inicio/administrador/servico', name: 'Service', Component: Service },
 	{ path: '/inicio/administrador/procedimento', name: 'Procedure', Component: Procedure },
 	{ path: '/inicio/administrador/clientes', name: 'CadClient', Component: CadClient },
+	{ path: '/inicio/administrador/logs', name: 'Logs', Component: Logs },
 ];
 
 export default routes;

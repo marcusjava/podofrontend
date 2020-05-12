@@ -1,33 +1,30 @@
-import React, { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { consults } from '../../redux/actions/consultActions';
-import { Col, Row, Container } from 'react-bootstrap';
+import React from 'react';
+import { Col, Row, Container, Button } from 'react-bootstrap';
 import Table from '../Consult/Table';
 import AddConsult from '../Consult/AddConsult';
+import { BsPersonFill } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-	const { items } = useSelector((state) => state.consult.consults);
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		dispatch(consults());
-	}, [dispatch]);
-
 	return (
 		<Container fluid>
 			<Row>
 				<Col className="text-center my-4">
-					<h4 className="title">MinhasConsultas</h4>
+					<h4 className="title">Minhas Consultas</h4>
 				</Col>
 			</Row>
 			<Row>
 				<Col className="text-right">
+					<Button as={Link} variant="info" className="mr-2" to="/inicio/administrador/clientes">
+						<BsPersonFill size={20} />
+						Cliente
+					</Button>
 					<AddConsult />
 				</Col>
 			</Row>
 			<Row>
 				<Col>
-					<Table data={items} />
+					<Table />
 				</Col>
 			</Row>
 		</Container>

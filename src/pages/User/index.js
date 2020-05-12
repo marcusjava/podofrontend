@@ -18,7 +18,7 @@ const User = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (user.success == true) {
+		if (user.success === true) {
 			setEditMode(false);
 			formRef.current.setErrors({});
 			formRef.current.reset();
@@ -139,7 +139,7 @@ const User = () => {
 				</Row>
 				<Row>
 					<Col md={6}>
-						<Input name="email" type="email" label="Email" label="Email" style={{ width: '50%' }} />
+						<Input name="email" type="email" label="Email" style={{ width: '50%' }} />
 					</Col>
 
 					<Col md={6} className="d-inline-flex">

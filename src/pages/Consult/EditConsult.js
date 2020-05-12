@@ -1,27 +1,25 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useRef } from 'react';
+import { toastr } from 'react-redux-toastr';
 import { useSelector, useDispatch } from 'react-redux';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
-import { Row, Col, Button, Modal } from 'react-bootstrap';
-import { Clients, searchClients } from '../../redux/actions/clientActions';
+import { Row, Col, Button, Modal, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Clients } from '../../redux/actions/clientActions';
 import { Form } from '@unform/web';
 import { DatePicker, TextArea, Select, Input } from '../../components/common/Form';
 import * as Yup from 'yup';
-import { updateConsult } from '../../redux/actions/consultActions';
-import { Procedures, searchProcedures } from '../../redux/actions/procedureActions';
+import { consults } from '../../redux/actions/consultActions';
+import { Procedures } from '../../redux/actions/procedureActions';
 import { FaEdit } from 'react-icons/fa';
+import axios from 'axios';
+import { parseISO } from 'date-fns';
+import './styles.css';
 
 dayjs.extend(utc);
 
 function EditConsult({ initial }) {
-	const [clientSel, setClientSel] = useState({});
 	const [show, setShow] = useState(false);
-
 	const { clients } = useSelector((state) => state.client);
-
-	const { success, error } = useSelector((state) => state.consult.consult);
-
 	const { procedures } = useSelector((state) => state.procedure);
 	const dispatch = useDispatch();
 
@@ -30,22 +28,9 @@ function EditConsult({ initial }) {
 	useEffect(() => {
 		dispatch(Clients());
 		dispatch(Procedures());
-	}, []);
+	}, [dispatch]);
 
-	useEffect(() => {
-		if (success === true) {
-			formRef.current.setErrors({});
-			formRef.current.reset();
-			setShow(false);
-		}
-		if (error === false) {
-			const errorMessages = {};
-			errorMessages[error.path] = error.message;
-			formRef.current.setErrors(errorMessages);
-		}
-	}, [success, error]);
-
-	const handleSubmit = async (data, { reset }) => {
+	const handleSubmit = async (data) => {
 		try {
 			const schema = Yup.object().shape({
 				date: Yup.string().required('Informe a data da consulta'),
@@ -55,15 +40,30 @@ function EditConsult({ initial }) {
 			});
 			await schema.validate(data, { abortEarly: false });
 			const sendData = {
+				_id: data._id,
 				date: dayjs(data.date).format('YYYY-MM-DDTHH:mm:ss.sssZ'),
 				client: data.client.value,
-				procedures: data.procedures,
+				procedures: data.procedures.map((procedure) => procedure.value),
 				type_consult: data.type_consult,
 				observations: data.observations,
-				status: { value: '0', label: 'Marcada' },
+				status: data.status,
 			};
-
-			dispatch(updateConsult(sendData));
+			try {
+				const response = await axios.put(`/consults/${sendData._id}`, sendData);
+				console.log(response);
+				if (response.status === 200) {
+					dispatch(consults());
+					toastr.success('Consulta atualizada com sucesso');
+					formRef.current.setErrors({});
+					formRef.current.reset();
+					setShow(false);
+				}
+			} catch (error) {
+				const { data } = error.response;
+				const errorMessages = {};
+				errorMessages[data.path] = data.message;
+				formRef.current.setErrors(errorMessages);
+			}
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
@@ -76,33 +76,21 @@ function EditConsult({ initial }) {
 	};
 
 	const clientInputChange = (input) => {
-		if (input) {
-			dispatch(searchClients(input));
+		if (input.length >= 3) {
+			dispatch(Clients({ name: input }));
 		}
-	};
-
-	const procedInputChange = (input) => {
-		if (input) {
-			dispatch(searchProcedures(input));
-		} else {
-			dispatch(Procedures());
+		if (input.length == 0) {
+			dispatch(Clients());
 		}
-	};
-
-	const onDateChanger = (date) => {
-		console.log(date);
-	};
-
-	const clientSelectChange = (e) => {
-		const selected = clients.items.filter((client) => client.id == e.value);
-		setClientSel(selected);
 	};
 
 	return (
 		<>
-			<span className="mx-2" onClick={() => setShow(true)}>
-				<FaEdit />
-			</span>
+			<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit"> Editar consulta</Tooltip>}>
+				<button className="btn btn-link" onClick={() => setShow(true)}>
+					<FaEdit size={20} />
+				</button>
+			</OverlayTrigger>
 
 			<Modal size="lg" show={show} onHide={() => setShow(false)}>
 				<Modal.Header closeButton>
@@ -113,24 +101,22 @@ function EditConsult({ initial }) {
 						ref={formRef}
 						initialData={{
 							_id: initial._id,
-							date: initial.date,
+							date: parseISO(initial.date),
 							client: { value: initial.client._id, label: initial.client.name },
 							procedures: initial.procedures.map((procedure) => ({
 								value: procedure._id,
 								label: procedure.name,
 							})),
 							type_consult: initial.type_consult,
+							status: initial.status,
 							observations: initial.observations,
 						}}
 						onSubmit={handleSubmit}
 					>
+						<Input type="hidden" name="_id" />
 						<Row>
 							<Col md={6}>
-								<DatePicker
-									placeholderText="Data/hora"
-									name="date"
-									onSelect={(date) => onDateChanger(date)}
-								/>
+								<DatePicker placeholderText="Data/hora" name="date" />
 							</Col>
 						</Row>
 						<Row>
@@ -138,7 +124,6 @@ function EditConsult({ initial }) {
 								<Select
 									label="Cliente"
 									name="client"
-									onChange={(e) => clientSelectChange(e)}
 									options={clients.options}
 									onInputChange={(input) => clientInputChange(input)}
 								/>
@@ -146,13 +131,7 @@ function EditConsult({ initial }) {
 						</Row>
 						<Row>
 							<Col md={6}>
-								<Select
-									label="Procedimentos"
-									isMulti
-									name="procedures"
-									options={procedures.options}
-									onInputChange={(input) => procedInputChange(input)}
-								/>
+								<Select label="Procedimentos" isMulti name="procedures" options={procedures.options} />
 							</Col>
 						</Row>
 						<Row>
@@ -164,6 +143,18 @@ function EditConsult({ initial }) {
 										{ label: 'Agendada', value: 0 },
 										{ label: 'Retorno', value: 1 },
 										{ label: 'Urgência', value: 2 },
+									]}
+								/>
+							</Col>
+						</Row>
+						<Row>
+							<Col md={3}>
+								<Select
+									label="Status"
+									name="status"
+									options={[
+										{ value: 2, label: 'Cancelada' },
+										{ value: 3, label: 'Remarcada' },
 									]}
 								/>
 							</Col>

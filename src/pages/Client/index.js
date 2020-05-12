@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 import Table from './Table';
 import withLoading from '../../components/common/withLoading';
 
-const Client = ({ history }) => {
+const Client = () => {
 	const [editMod, setEditMode] = useState(false);
 
 	const client = useSelector((state) => state.client.client);
@@ -22,10 +22,10 @@ const Client = ({ history }) => {
 
 	useEffect(() => {
 		dispatch(Clients());
-	}, []);
+	}, [dispatch]);
 
 	useEffect(() => {
-		if (client.success == true) {
+		if (client.success === true) {
 			setEditMode(false);
 			formRef.current.setErrors({});
 			formRef.current.reset();
@@ -109,45 +109,63 @@ const Client = ({ history }) => {
 				</Row>
 				<Row>
 					<Col md={6}>
-						<Input name="name" label="Nome" style={{ width: '60%' }} />
+						<Input name="name" label="Nome" style={{ width: '60%' }} maxLength={200} />
 					</Col>
 					<Col md={3}>
-						<Input name="email" label="Email" type="email" />
+						<Input name="email" label="Email" type="email" maxLength={50} />
 					</Col>
 				</Row>
 				<Row>
 					<Col md={3}>
-						<Input name="instagram" label="Instagram" />
+						<Input name="instagram" label="Instagram" maxLength={50} />
 					</Col>
 					<Col md={3}>
-						<Input name="cpf" label="CPF" style={{ width: '60%' }} placeholder="XXXXXXXXXXX" />
+						<Input
+							name="cpf"
+							label="CPF"
+							style={{ width: '60%' }}
+							placeholder="XXXXXXXXXXX"
+							maxLength={11}
+						/>
 					</Col>
 					<Col md={3}>
-						<Input name="contact" label="Telefone" style={{ width: '60%' }} placeholder="XX XXXXX-XXXX" />
+						<Input
+							name="contact"
+							label="Telefone"
+							style={{ width: '60%' }}
+							placeholder="XX XXXXX-XXXX"
+							maxLength={12}
+						/>
 					</Col>
 
 					<Col md={3}>
-						<Input name="nasc" label="Nascimento" style={{ width: '60%' }} placeholder="XX/XX/XXXX" />
+						<Input
+							name="nasc"
+							label="Nascimento"
+							style={{ width: '60%' }}
+							placeholder="XX/XX/XXXX"
+							maxLength={9}
+						/>
 					</Col>
 				</Row>
 				<Row>
 					<Col md={6}>
-						<Input name="address.street" label="Endereço" style={{ width: '80%' }} />
+						<Input name="address.street" label="Endereço" style={{ width: '80%' }} maxLength={200} />
 					</Col>
 					<Col md={3}>
-						<Input name="address.neighborhood" label="Bairro" />
+						<Input name="address.neighborhood" label="Bairro" maxLength={100} />
 					</Col>
 				</Row>
 				<Row>
 					<Col md={3}>
-						<Input name="address.city" label="Cidade" />
+						<Input name="address.city" label="Cidade" maxLength={50} />
 					</Col>
 
 					<Col md={3}>
-						<Input name="address.state" label="Estado" />
+						<Input name="address.state" label="Estado" maxLength={2} style={{ width: '20%' }} />
 					</Col>
 					<Col md={3}>
-						<Input name="address.cep" label="CEP" style={{ width: '50%' }} />
+						<Input name="address.cep" label="CEP" style={{ width: '50%' }} maxLength={10} />
 					</Col>
 				</Row>
 
@@ -176,7 +194,7 @@ const Client = ({ history }) => {
 						/>
 					</Col>
 					<Col md={6}>
-						<Input name="occupation" label="Profissao" style={{ width: '50%' }} />
+						<Input name="occupation" label="Profissao" style={{ width: '50%' }} maxLength={50} />
 					</Col>
 				</Row>
 

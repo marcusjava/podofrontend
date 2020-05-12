@@ -28,7 +28,7 @@ const Procedure = () => {
 	};
 
 	useEffect(() => {
-		if (procedure.success == true) {
+		if (procedure.success === true) {
 			setEditMod(false);
 			formRef.current.setErrors({});
 			formRef.current.reset();

@@ -20,7 +20,7 @@ export const saveConsult = (data) => (dispatch) => {
 		.then((response) => {
 			dispatch({ type: FETCH_CONSULT_SUCCESS, payload: response.data });
 			toastr.success('Consulta salva com sucesso');
-			dispatch(consults());
+			//dispatch(consults());
 		})
 		.catch((error) => {
 			dispatch({ type: FETCH_CONSULT_ERROR, payload: error.response.data });
@@ -36,7 +36,7 @@ export const updateConsult = (data) => (dispatch) => {
 	dispatch({ type: FETCH_CONSULT_REQUEST });
 
 	return axios
-		.post(`/consults/${data.id}`, data)
+		.put(`/consults/${data._id}`, data)
 		.then((response) => {
 			dispatch({ type: FETCH_CONSULT_SUCCESS, payload: response.data });
 			toastr.success('Consulta atualizada com sucesso');
@@ -48,11 +48,11 @@ export const updateConsult = (data) => (dispatch) => {
 		});
 };
 
-export const consults = (dateI, dateF, client, status) => (dispatch) => {
+export const consults = (query) => (dispatch) => {
 	dispatch({ type: FETCH_CONSULTS_REQUEST });
 
 	return axios
-		.get(`/consults`, { params: { client, status, dateI, dateF } })
+		.get(`/consults`, { params: query })
 		.then((response) => {
 			dispatch({ type: FETCH_CONSULTS_SUCCESS, payload: response.data });
 		})
