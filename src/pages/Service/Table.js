@@ -1,6 +1,5 @@
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { FaTrashAlt } from 'react-icons/fa';
 
 const Table = ({ data, rowSelect }) => {
 	const selectRowProp = {

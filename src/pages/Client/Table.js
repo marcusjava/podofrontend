@@ -1,7 +1,6 @@
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import classnames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { Clients } from '../../redux/actions/clientActions';
 import { MdRemoveRedEye } from 'react-icons/md';
@@ -30,15 +29,16 @@ const Table = ({ rowSelect, data }) => {
 
 	const pictureFormat = (cell, row) => {
 		return (
-			<a href={cell} target="_blank">
+			<a href={cell} target="_blank" rel="noopener noreferrer">
 				<img src={cell} alt="Perfil" style={{ width: '50px', height: '50px', borderRadius: 50 }} />
 			</a>
 		);
 	};
 
 	const instaFormat = (cell, row) => {
+		console.log(cell);
 		return (
-			<a href={cell} target="_blank">
+			<a href={cell} target="_blank" rel="noopener noreferrer">
 				{cell}
 			</a>
 		);

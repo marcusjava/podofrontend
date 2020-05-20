@@ -79,7 +79,7 @@ function EditConsult({ initial }) {
 		if (input.length >= 3) {
 			dispatch(Clients({ name: input }));
 		}
-		if (input.length == 0) {
+		if (input.length === 0) {
 			dispatch(Clients());
 		}
 	};

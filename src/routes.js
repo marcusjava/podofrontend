@@ -23,10 +23,6 @@ const Procedure = Loadable({
 	loader: () => import('./pages/Procedure'),
 	loading: Loading,
 });
-const Client = Loadable({
-	loader: () => import('./pages/Client/CardItems'),
-	loading: Loading,
-});
 
 const CadClient = Loadable({
 	loader: () => import('./pages/Client'),
@@ -54,16 +50,15 @@ const Logs = Loadable({
 });
 
 const routes = [
-	{ path: '/inicio/principal', name: 'Dashboard', Component: Dashboard },
-	{ path: '/inicio/consultas', name: 'Consults', Component: Consults },
-	{ path: '/inicio/consulta/:id', name: 'Consult', Component: Consult },
-	{ path: '/inicio/clientes', exact: true, name: 'Client', Component: Client },
-	{ path: '/inicio/clientes/detalhes/:id', name: 'ClientDetail', Component: ClientDetail },
-	{ path: '/inicio/administrador/usuario', name: 'User', Component: User },
-	{ path: '/inicio/administrador/servico', name: 'Service', Component: Service },
-	{ path: '/inicio/administrador/procedimento', name: 'Procedure', Component: Procedure },
-	{ path: '/inicio/administrador/clientes', name: 'CadClient', Component: CadClient },
-	{ path: '/inicio/administrador/logs', name: 'Logs', Component: Logs },
+	{ path: '/inicio/principal', name: 'Inicio', Component: Dashboard },
+	{ path: '/inicio/consultas', name: 'Consultas', Component: Consults },
+	{ path: '/inicio/consulta/:id', name: 'Detalhes Consulta', Component: Consult },
+	{ path: '/inicio/clientes', exact: true, name: 'Cadadastro Clientes', Component: CadClient },
+	{ path: '/inicio/clientes/detalhes/:id', name: 'Detalhes Cliente', Component: ClientDetail },
+	{ path: '/inicio/administrador/usuario', name: 'Usuarios', Component: User },
+	{ path: '/inicio/administrador/servico', name: 'Serviços', Component: Service },
+	{ path: '/inicio/administrador/procedimento', name: 'PProcedimentos', Component: Procedure },
+	{ path: '/inicio/administrador/logs', name: 'Logs Sistema', Component: Logs },
 ];
 
 export default routes;

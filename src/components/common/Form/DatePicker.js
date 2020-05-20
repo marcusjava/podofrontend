@@ -39,6 +39,7 @@ const DatePicker = ({ name, label, ...rest }) => {
 				showTimeSelect={true}
 				timeCaption="Hora"
 				dateFormat="dd/MM/yyyy HH:mm"
+				minDate={new Date()}
 				locale="pt-br"
 				{...rest}
 			/>

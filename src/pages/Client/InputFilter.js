@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Clients } from '../../redux/actions/clientActions';
-import { Row, Col, Card, ListGroup, Form } from 'react-bootstrap';
+import { Row, Col, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const InputFilter = () => {
@@ -17,29 +16,28 @@ const InputFilter = () => {
 		}
 	};
 
-	const listItems = value && (
+	const listItems = value.length >= 3 && (
 		<ul
 			className="list-unstyled bg-white"
 			style={{ position: 'absolute', top: '30px', right: '25px', width: '240px' }}
 		>
-			{items.map((item, index) => (
-				<li className="media p-2 border border-primary rounded" key={item._id}>
-					<img
-						className="mr-1"
-						src={item.avatar_url}
-						alt="Perfil"
-						style={{ width: '50px', height: '50px' }}
-					/>
-					<div className="media-body">
-						<p>{item.name}</p>
-						<div className="text-right">
-							<a href="#">
+			{items.length > 0 &&
+				items.map((item, index) => (
+					<li className="media p-2 border border-primary rounded" key={item._id}>
+						<img
+							className="mr-1"
+							src={item.avatar_url}
+							alt="Perfil"
+							style={{ width: '50px', height: '50px' }}
+						/>
+						<div className="media-body">
+							<p>{item.name}</p>
+							<div className="text-right">
 								<Link to={`/inicio/clientes/detalhes/${item._id}`}>Ver</Link>
-							</a>
+							</div>
 						</div>
-					</div>
-				</li>
-			))}
+					</li>
+				))}
 		</ul>
 	);
 
@@ -53,6 +51,7 @@ const InputFilter = () => {
 						name="search"
 						onInput={searchFilter}
 						onChange={(e) => setValue(e.target.value)}
+						value={value}
 						className="input input-sm mr-sm-2"
 					/>
 				</Col>

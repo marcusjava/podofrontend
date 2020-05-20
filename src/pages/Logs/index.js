@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
-import Select from 'react-select';
 import { IoIosSearch } from 'react-icons/io';
 import axios from 'axios';
 import Inspector from 'react-json-inspector';

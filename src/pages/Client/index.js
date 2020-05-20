@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Row, Col, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveClient, updateClient, Clients } from '../../redux/actions/clientActions';
@@ -8,7 +7,6 @@ import { Form } from '@unform/web';
 import { FileUpload, Input, Select } from '../../components/common/Form';
 import * as Yup from 'yup';
 import Table from './Table';
-import withLoading from '../../components/common/withLoading';
 
 const Client = () => {
 	const [editMod, setEditMode] = useState(false);
@@ -37,10 +35,22 @@ const Client = () => {
 		}
 	}, [client.success, client.error]);
 
-	const rowSelect = (row, isSelected) => {
-		console.log(isSelected);
+	const rowSelect = (row) => {
 		setEditMode(true);
-		formRef.current.setData(row);
+		formRef.current.setFieldValue('id', row._id);
+		formRef.current.setFieldValue('name', row.name);
+		formRef.current.setFieldValue('instagram', row.instagram);
+		formRef.current.setFieldValue('cpf', row.cpf);
+		formRef.current.setFieldValue('rg', row.rg);
+		formRef.current.setFieldValue('email', row.email);
+		formRef.current.setFieldValue('address.street', row.address.street);
+		formRef.current.setFieldValue('address.neighborhood', row.address.neighborhood);
+		formRef.current.setFieldValue('address.city', row.address.city);
+		formRef.current.setFieldValue('address.state', row.address.state);
+		formRef.current.setFieldValue('address.cep', row.address.cep);
+		formRef.current.setFieldValue('occupation', row.occupation);
+		formRef.current.setFieldValue('contact', row.contact);
+		formRef.current.setFieldValue('nasc', row.nasc);
 		formRef.current.setFieldValue('sex', row.sex);
 		formRef.current.setFieldValue('etnia', row.etnia);
 	};
@@ -82,11 +92,6 @@ const Client = () => {
 				});
 			}
 		}
-	};
-
-	const handleCancel = (e) => {
-		formRef.current.reset();
-		setEditMode(false);
 	};
 
 	return (
@@ -218,4 +223,4 @@ const Client = () => {
 	);
 };
 
-export default withRouter(withLoading(Client));
+export default withRouter(Client);

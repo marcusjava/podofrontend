@@ -38,7 +38,11 @@ const Service = () => {
 					loadServices();
 				})
 				.catch((error) => {
-					console.log(error);
+					const errorMessages = {};
+					const { path, message } = error.response.data;
+					errorMessages[path] = message;
+					formRef.current.setErrors(errorMessages);
+					toastr.error(message);
 				});
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {

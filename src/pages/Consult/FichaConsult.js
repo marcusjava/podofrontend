@@ -28,7 +28,7 @@ const FichaConsult = () => {
 			setPhotos(response.data);
 		}
 		getPhotos();
-	}, []);
+	}, [id]);
 
 	return Object.entries(item).length === 0 ? (
 		<Spinner />
@@ -99,7 +99,7 @@ const FichaConsult = () => {
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.esporte.option == true}
+							checked={item.anamnese.esporte.option === true}
 						/>
 						<label className="mr-2"> Qt - {item.anamnese.esporte.qt.value}</label>
 						<Form.Label>Pé predom. - {item.anamnese.pe_predominante.label}</Form.Label>
@@ -118,7 +118,7 @@ const FichaConsult = () => {
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.medicamento.option == true}
+							checked={item.anamnese.medicamento.option === true}
 						/>
 						<label className="mr-2"> Quais - {item.anamnese.medicamento.description}</label>
 					</Col>
@@ -128,7 +128,7 @@ const FichaConsult = () => {
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.alergia.option == true}
+							checked={item.anamnese.alergia.option === true}
 						/>
 						<label className="mr-2"> Quais - {item.anamnese.alergia.description}</label>
 					</Col>
@@ -141,7 +141,7 @@ const FichaConsult = () => {
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.doenca.option == true}
+							checked={item.anamnese.doenca.option === true}
 						/>
 						<label className="mr-2"> Quais - {item.anamnese.doenca.description}</label>
 					</Col>
@@ -151,28 +151,28 @@ const FichaConsult = () => {
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.diabetico == true}
+							checked={item.anamnese.diabetico === true}
 						/>
 						<Form.Check
 							label="Diabetico Familia?"
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.diabetico_familia == true}
+							checked={item.anamnese.diabetico_familia === true}
 						/>
 						<Form.Check
 							label="Hipertensão?"
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.hipertensao == true}
+							checked={item.anamnese.hipertensao === true}
 						/>
 						<Form.Check
 							label="Cardiopata?"
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.cardiopata == true}
+							checked={item.anamnese.cardiopata === true}
 						/>
 					</Col>
 				</Row>
@@ -183,21 +183,21 @@ const FichaConsult = () => {
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.fumante == true}
+							checked={item.anamnese.fumante === true}
 						/>
 						<Form.Check
 							label="Etilista?"
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.etilista == true}
+							checked={item.anamnese.etilista === true}
 						/>
 						<Form.Check
 							label="DST?"
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.dst == true}
+							checked={item.anamnese.dst === true}
 						/>
 					</Col>
 					<Col md={6} className="form-inline mt-2">
@@ -206,7 +206,7 @@ const FichaConsult = () => {
 							type="checkbox"
 							readOnly
 							className="mr-2"
-							checked={item.anamnese.grav_lact == true}
+							checked={item.anamnese.grav_lact === true}
 						/>
 						<label className="mr-2"> Outros? - {item.anamnese.outros}</label>
 					</Col>
@@ -219,9 +219,7 @@ const FichaConsult = () => {
 						</Form.Group>
 					</Col>
 				</Row>
-			</div>
-			<div className="page">
-				<Row className="justify-content-center mb-4">
+				<Row className="justify-content-center mb-4 page-break">
 					<Col md={4} className="text-center">
 						<Image className="mt-2" src={Logo2} />
 					</Col>
@@ -439,9 +437,7 @@ const FichaConsult = () => {
 						</Form.Group>
 					</Col>
 				</Row>
-			</div>
-			<div className="page">
-				<Row className="justify-content-center mb-4">
+				<Row className="justify-content-center mb-4 page-break">
 					<Col md={4} className="text-center">
 						<Image className="mt-2" src={Logo2} />
 					</Col>
@@ -680,9 +676,7 @@ const FichaConsult = () => {
 						<p>Pulsos - {item.anamnese.exame_fisico.pulsos}</p>
 					</Col>
 				</Row>
-			</div>
-			<div className="page">
-				<Row className="justify-content-center mb-4">
+				<Row className="justify-content-center mb-4 page-break">
 					<Col md={4} className="text-center">
 						<Image className="mt-2" src={Logo2} />
 					</Col>
@@ -694,7 +688,7 @@ const FichaConsult = () => {
 					</Col>
 				</Row>
 				<Row>
-					{photos.length == 0 ? (
+					{photos.length === 0 ? (
 						<Col>
 							<p className="text-muted text-center">Sem fotos</p>
 						</Col>

@@ -47,7 +47,7 @@ const NavBar = () => {
 							</span>
 						}
 					>
-						<NavDropdown.Item as={Link} to="/inicio/administrador/clientes">
+						<NavDropdown.Item as={Link} to="/inicio/clientes">
 							<GiMorgueFeet /> Clientes
 						</NavDropdown.Item>
 						<NavDropdown.Divider />

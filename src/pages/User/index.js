@@ -130,16 +130,28 @@ const User = () => {
 				<Row>
 					<Col md={6}>
 						<Input name="id" hidden />
-						<Input name="name" label="Nome" style={{ width: '80%' }} />
+						<Input name="name" label="Nome" style={{ width: '80%' }} maxLength={150} />
 					</Col>
 					<Col md={6} className="d-inline-flex ">
-						<Input name="phone" label="Contato" style={{ width: '200px', marginRight: '5px' }} />
-						<Input label="CPF" placeholder="Ex xxx.xxx.xxx-xx" name="cpf" style={{ width: '200px' }} />
+						<Input
+							name="phone"
+							label="Contato"
+							placeholder="Ex. XX XXXXX-XXXX"
+							style={{ width: '200px', marginRight: '5px' }}
+							maxLength={14}
+						/>
+						<Input
+							label="CPF"
+							placeholder="Ex xxxxxxxxxxx"
+							name="cpf"
+							style={{ width: '200px' }}
+							maxLength={11}
+						/>
 					</Col>
 				</Row>
 				<Row>
 					<Col md={6}>
-						<Input name="email" type="email" label="Email" style={{ width: '50%' }} />
+						<Input name="email" type="email" label="Email" style={{ width: '50%' }} maxLength={90} />
 					</Col>
 
 					<Col md={6} className="d-inline-flex">
@@ -147,7 +159,8 @@ const User = () => {
 							name="rg"
 							label="RG"
 							style={{ width: '180px', marginRight: '25px' }}
-							placeholder="Ex x.xxx.xxx-x"
+							placeholder="Ex xxxxxxxx"
+							maxLength={8}
 						/>
 						<CheckBox name="role.Administrador" label="Administrador" />
 						<CheckBox name="role.Usuario" label="Usuario" />
@@ -155,12 +168,22 @@ const User = () => {
 				</Row>
 				<Row>
 					<Col md={6} className="d-inline-flex">
-						<Input name="address.street" style={{ width: '340px', marginRight: '5px' }} label="Rua" />
-						<Input name="address.neighborhood" style={{ width: '190px' }} label="Bairro" />
+						<Input
+							name="address.street"
+							style={{ width: '340px', marginRight: '5px' }}
+							label="Rua"
+							maxLength={100}
+						/>
+						<Input name="address.neighborhood" style={{ width: '280px' }} label="Bairro" maxLength={50} />
 					</Col>
 					<Col md={6} className="d-inline-flex ">
-						<Input name="address.city" style={{ width: '240px', marginRight: '5px' }} label="Cidade" />
-						<Input name="address.state" style={{ width: '160px' }} label="Estado" />
+						<Input
+							name="address.city"
+							style={{ width: '280px', marginRight: '5px' }}
+							label="Cidade"
+							maxLength={50}
+						/>
+						<Input name="address.state" style={{ width: '50px' }} label="Estado" maxLength={2} />
 					</Col>
 				</Row>
 				<Row>

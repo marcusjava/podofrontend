@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 const FileMultiUpload = ({ name, info, label, disabled, ...rest }) => {
 	const inputRef = useRef(null);
-	const { fieldName, registerField, defaultValue, error } = useField(name);
+	const { fieldName, registerField, error } = useField(name);
 
 	useEffect(() => {
 		registerField({

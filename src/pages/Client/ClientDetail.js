@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Row, Col, Image } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';

@@ -15,7 +15,7 @@ const Dashboard = () => {
 			</Row>
 			<Row>
 				<Col className="text-right">
-					<Button as={Link} variant="info" className="mr-2" to="/inicio/administrador/clientes">
+					<Button as={Link} variant="info" className="mr-2" to="/inicio/clientes">
 						<BsPersonFill size={20} />
 						Cliente
 					</Button>

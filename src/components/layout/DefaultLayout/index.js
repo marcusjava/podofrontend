@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import NavBar from '../NavBar';
 import Footer from '../Footer';
-import { Col, Row, Container } from 'react-bootstrap';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import { Switch, Redirect } from 'react-router-dom';
 import Breadcrumbs from 'react-router-dynamic-breadcrumbs';
 import PrivateRoute from '../../common/PrivateRoute';
 

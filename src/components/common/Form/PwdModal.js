@@ -1,11 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FaUnlockAlt } from 'react-icons/fa';
 import { Form } from '@unform/web';
 import Input from './Input';
-import axios from 'axios';
 import * as Yup from 'yup';
-import { toastr } from 'react-redux-toastr';
 import { useSelector, useDispatch } from 'react-redux';
 import { change_pwd } from '../../../redux/actions/userActions';
 
@@ -14,7 +12,7 @@ const PwdModal = ({ id }) => {
 	const [show, setShow] = useState(false);
 
 	const dispatch = useDispatch();
-	const { success } = useSelector(state => state.user.user);
+	const { success } = useSelector((state) => state.user.user);
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
@@ -40,7 +38,7 @@ const PwdModal = ({ id }) => {
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
-				error.inner.forEach(erro => {
+				error.inner.forEach((erro) => {
 					errorMessages[erro.path] = erro.message;
 					formRef.current.setErrors(errorMessages);
 				});
@@ -50,9 +48,11 @@ const PwdModal = ({ id }) => {
 
 	return (
 		<>
-			<button className="btn btn-link" onClick={handleShow}>
-				<FaUnlockAlt />
-			</button>
+			<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit">Alterar Senha</Tooltip>}>
+				<button className="btn btn-link" onClick={handleShow}>
+					<FaUnlockAlt />
+				</button>
+			</OverlayTrigger>
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header closeButton>
 					<Modal.Title>Alterar a senha </Modal.Title>

@@ -62,15 +62,6 @@ const Table = ({ rowSelect }) => {
 		}
 	};
 
-	const handleCpfChange = (e) => {
-		const { value } = e.target;
-		if (value) {
-			dispatch(getUsers({ cpf: value }));
-		} else {
-			dispatch(getUsers());
-		}
-	};
-
 	const handleContactChange = (e) => {
 		const { value } = e.target;
 		if (value) {

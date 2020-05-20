@@ -88,7 +88,7 @@ const Table = ({ client_id }) => {
 			return;
 		}
 		const confirm = window.confirm('Tem certeza que deseja cancelar a consulta?');
-		if (confirm == true) {
+		if (confirm === true) {
 			row.status = { value: 2, label: 'Cancelada' };
 			dispatch(updateConsult(row));
 		}
@@ -171,10 +171,6 @@ const Table = ({ client_id }) => {
 			</Button>
 		</div>
 	);
-
-	const handleDateChange = (e) => {
-		console.log(e.target.value);
-	};
 
 	return (
 		<>

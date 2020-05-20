@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
@@ -22,9 +21,8 @@ function AddConsult() {
 
 	const { clients } = useSelector((state) => state.client);
 
-	const { success, error } = useSelector((state) => state.consult.consult);
-
 	const { procedures } = useSelector((state) => state.procedure);
+
 	const dispatch = useDispatch();
 
 	const formRef = useRef(null);
@@ -32,7 +30,7 @@ function AddConsult() {
 	useEffect(() => {
 		dispatch(Clients());
 		dispatch(Procedures());
-	}, []);
+	}, [dispatch]);
 
 	const handleSubmit = async (data, { reset }) => {
 		try {
@@ -82,7 +80,7 @@ function AddConsult() {
 		if (input.length >= 3) {
 			dispatch(Clients({ name: input }));
 		}
-		if (input.length == 0) {
+		if (input.length === 0) {
 			dispatch(Clients());
 		}
 	};
