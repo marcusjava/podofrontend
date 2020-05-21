@@ -38,7 +38,6 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.interceptors.request.use(
 	(config) => {
 		if (!config.url.endsWith('/login')) {
-			console.log('Entrando no request interceptor...');
 			const token = localStorage.getItem('token');
 			const decoded = jwtDecode(token);
 			const currentTime = Date.now() / 1000;
@@ -56,7 +55,6 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
 	(response) => {
-		console.log('response interceptor', response);
 		return response;
 	},
 	(error) => {
