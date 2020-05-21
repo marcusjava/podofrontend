@@ -31,7 +31,8 @@ if (localStorage.getItem('token')) {
 	store.dispatch(setCurrentUser(decoded));
 }
 
-axios.defaults.baseURL = 'http://localhost:3001/api';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+//https://podo-backend.herokuapp.com/api/
 //axios.defaults.headers.common['Authorization'] = AUTH_TOKEN
 
 axios.interceptors.request.use(
