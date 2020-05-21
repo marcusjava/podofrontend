@@ -4,11 +4,6 @@ import { IoIosSearch } from 'react-icons/io';
 import axios from 'axios';
 import Inspector from 'react-json-inspector';
 
-const options = [
-	{ value: 0, label: 'Selecione' },
-	{ value: 1, label: 'Consultas' },
-	{ value: 2, label: 'Fotos' },
-];
 const Logs = () => {
 	const [id, setId] = useState('');
 	const [items, setItems] = useState([]);
@@ -19,12 +14,6 @@ const Logs = () => {
 		setItems(response.data);
 	};
 
-	const handleSelect = (option) => {
-		if (option.value === 1) {
-		}
-		if (option.value === 2) {
-		}
-	};
 	return (
 		<>
 			<Row className="justify-content-center mb-4">

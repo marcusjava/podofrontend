@@ -33,7 +33,7 @@ if (localStorage.getItem('token')) {
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 //https://podo-backend.herokuapp.com/api/
-//axios.defaults.headers.common['Authorization'] = AUTH_TOKEN
+//|| ' http://localhost:3001/api'
 
 axios.interceptors.request.use(
 	(config) => {

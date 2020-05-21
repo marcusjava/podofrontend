@@ -19,6 +19,7 @@ import PhotoList from '../../components/consult/PhotoList';
 import { Link } from 'react-router-dom';
 import { FaPrint } from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
+
 dayjs.extend(utc);
 
 const NOMENCLATURA_DEDOS_PE = [
@@ -104,7 +105,7 @@ const Consult = () => {
 			const response = await axios.post(`/photos/${id}`, fileData);
 			setPhotos([...photos, response.data]);
 		} catch (error) {
-			console.log(error.response.data);
+			toastr.error('Ocorreu um erro ao fazer o upload da foto', error.response.data);
 		}
 	};
 
