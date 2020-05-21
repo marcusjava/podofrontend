@@ -143,7 +143,6 @@ const Consult = () => {
 					data.files.forEach(handleUpload);
 					const response = await axios.put(`/consults/${data._id}`, sendData);
 					if (response.status === 200) {
-						console.log(response.status);
 						toastr.success('Consulta atualizada com sucesso');
 						history.push('/inicio/principal');
 					}
