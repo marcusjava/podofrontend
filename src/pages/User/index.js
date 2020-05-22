@@ -149,11 +149,8 @@ const User = () => {
 						/>
 					</Col>
 				</Row>
-				<Row>
-					<Col md={6}>
-						<Input name="email" type="email" label="Email" style={{ width: '50%' }} maxLength={90} />
-					</Col>
 
+				<Row>
 					<Col md={6} className="d-inline-flex">
 						<Input
 							name="rg"
@@ -162,6 +159,31 @@ const User = () => {
 							placeholder="Ex xxxxxxxx"
 							maxLength={8}
 						/>
+						<Input name="nasc" placeholder="Ex. xx-xx-xxxx" style={{ width: '200px' }} label="Nascimento" />
+					</Col>
+					<Col md={6} className="d-inline-flex">
+						<Input
+							disabled={editMod}
+							name="password"
+							type="password"
+							style={{ width: '200px', marginRight: '10px' }}
+							label="Senha"
+						/>
+						<Input
+							disabled={editMod}
+							name="password2"
+							type="password"
+							style={{ width: '200px' }}
+							label="Confirma Senha"
+						/>
+					</Col>
+				</Row>
+				<Row>
+					<Col md={6}>
+						<Input name="email" type="email" label="Email" style={{ width: '50%' }} maxLength={90} />
+					</Col>
+
+					<Col md={6} className="d-inline-flex">
 						<CheckBox name="role.Administrador" label="Administrador" />
 						<CheckBox name="role.Usuario" label="Usuario" />
 					</Col>
@@ -189,7 +211,6 @@ const User = () => {
 				<Row>
 					<Col md={6} className="d-inline-flex ">
 						<Input name="address.cep" style={{ width: '160px', marginRight: '5px' }} label="CEP" />
-						<Input name="nasc" placeholder="Ex. xx-xx-xxxx" style={{ width: '200px' }} label="Nascimento" />
 					</Col>
 					<Col md={2}>
 						<Select
@@ -203,24 +224,7 @@ const User = () => {
 						/>
 					</Col>
 				</Row>
-				<Row>
-					<Col md={6} className="d-inline-flex">
-						<Input
-							disabled={editMod}
-							name="password"
-							type="password"
-							style={{ width: '200px', marginRight: '10px' }}
-							label="Senha"
-						/>
-						<Input
-							disabled={editMod}
-							name="password2"
-							type="password"
-							style={{ width: '200px' }}
-							label="Confirma Senha"
-						/>
-					</Col>
-				</Row>
+
 				<Row>
 					<Col md={6}></Col>
 					<Col md={6} className="text-right">
