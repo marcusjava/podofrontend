@@ -97,7 +97,7 @@ const Table = ({ rowSelect, data }) => {
 				<br />
 				<input type="text" style={{ width: '120px' }} onChange={handleEmailChange} />
 			</TableHeaderColumn>
-			<TableHeaderColumn dataField="insta_url" dataFormat={instaFormat}>
+			<TableHeaderColumn dataField="instagram" dataFormat={instaFormat}>
 				Instagram
 			</TableHeaderColumn>
 			<TableHeaderColumn dataField="cpf">
