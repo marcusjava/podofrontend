@@ -75,7 +75,7 @@ const Table = ({ rowSelect }) => {
 			<TableHeaderColumn isKey dataField="id" hidden>
 				Id
 			</TableHeaderColumn>
-			<TableHeaderColumn dataField="thumbnail_url" dataFormat={pictureFormat} width="90">
+			<TableHeaderColumn dataField="avatar_url" dataFormat={pictureFormat} width="90">
 				Foto
 			</TableHeaderColumn>
 			<TableHeaderColumn dataField="name" dataSort={true}>
