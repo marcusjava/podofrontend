@@ -103,6 +103,7 @@ const User = () => {
 		formRef.current.setFieldValue('cpf', row.cpf);
 		formRef.current.setFieldValue('email', row.email);
 		formRef.current.setFieldValue('rg', row.rg);
+		formRef.current.setFieldValue('nasc', row.nasc);
 		formRef.current.setFieldValue('role.Administrador', row.role.Administrador);
 		formRef.current.setFieldValue('role.Usuario', row.role.Usuario);
 		formRef.current.setFieldValue('address.street', row.address.street);
@@ -121,7 +122,7 @@ const User = () => {
 					<p className="title text-center">Cadastro Usuarios</p>
 				</Col>
 			</Row>
-			<Form ref={formRef} onSubmit={handleSubmit}>
+			<Form ref={formRef} onSubmit={handleSubmit} autocomplete="off">
 				<Row className="justify-content-center">
 					<Col md={2}>
 						<FileUpload name="thumbnail" />
@@ -138,7 +139,7 @@ const User = () => {
 							label="Contato"
 							placeholder="Ex. XX XXXXX-XXXX"
 							style={{ width: '200px', marginRight: '5px' }}
-							maxLength={14}
+							maxLength={13}
 						/>
 						<Input
 							label="CPF"
@@ -159,28 +160,18 @@ const User = () => {
 							placeholder="Ex xxxxxxxx"
 							maxLength={8}
 						/>
-						<Input name="nasc" placeholder="Ex. xx-xx-xxxx" style={{ width: '200px' }} label="Nascimento" />
-					</Col>
-					<Col md={6} className="d-inline-flex">
 						<Input
-							disabled={editMod}
-							name="password"
-							type="password"
-							style={{ width: '200px', marginRight: '10px' }}
-							label="Senha"
-						/>
-						<Input
-							disabled={editMod}
-							name="password2"
-							type="password"
+							name="nasc"
+							placeholder="Ex. xx-xx-xxxx"
 							style={{ width: '200px' }}
-							label="Confirma Senha"
+							label="Nascimento"
+							maxLength={10}
 						/>
 					</Col>
 				</Row>
 				<Row>
 					<Col md={6}>
-						<Input name="email" type="email" label="Email" style={{ width: '50%' }} maxLength={90} />
+						<Input name="email" type="email" label="Email" style={{ width: '50%' }} maxLength={100} />
 					</Col>
 
 					<Col md={6} className="d-inline-flex">
@@ -196,14 +187,14 @@ const User = () => {
 							label="Rua"
 							maxLength={100}
 						/>
-						<Input name="address.neighborhood" style={{ width: '280px' }} label="Bairro" maxLength={50} />
+						<Input name="address.neighborhood" style={{ width: '280px' }} label="Bairro" maxLength={70} />
 					</Col>
 					<Col md={6} className="d-inline-flex ">
 						<Input
 							name="address.city"
 							style={{ width: '280px', marginRight: '5px' }}
 							label="Cidade"
-							maxLength={50}
+							maxLength={70}
 						/>
 						<Input name="address.state" style={{ width: '50px' }} label="Estado" maxLength={2} />
 					</Col>
@@ -221,6 +212,29 @@ const User = () => {
 								{ value: 0, label: 'Ativo' },
 								{ value: 1, label: 'Inativo' },
 							]}
+						/>
+					</Col>
+					<Col>
+						<input style={{ display: 'none' }} type="text" name="fakeusernameremembered" />
+					</Col>
+				</Row>
+				<Row>
+					<Col md={6} className="d-inline-flex">
+						<Input
+							autocomplete="off"
+							disabled={editMod}
+							name="password"
+							type="password"
+							style={{ width: '200px', marginRight: '10px' }}
+							label="Senha"
+						/>
+						<Input
+							autocomplete="off"
+							disabled={editMod}
+							name="password2"
+							type="password"
+							style={{ width: '200px' }}
+							label="Confirma Senha"
 						/>
 					</Col>
 				</Row>
