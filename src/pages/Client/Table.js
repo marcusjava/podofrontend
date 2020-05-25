@@ -36,7 +36,6 @@ const Table = ({ rowSelect, data }) => {
 	};
 
 	const instaFormat = (cell, row) => {
-		console.log(cell);
 		return (
 			<a href={cell} target="_blank" rel="noopener noreferrer">
 				{cell}

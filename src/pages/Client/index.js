@@ -36,6 +36,7 @@ const Client = () => {
 	}, [client.success, client.error]);
 
 	const rowSelect = (row) => {
+		console.log(row);
 		setEditMode(true);
 		formRef.current.setFieldValue('id', row._id);
 		formRef.current.setFieldValue('name', row.name);

@@ -23,8 +23,11 @@ const Procedure = () => {
 
 	const rowSelect = (row) => {
 		setEditMod(true);
-		formRef.current.setFieldValue('service', { value: row.service._id, label: row.service.description });
-		formRef.current.setData(row);
+		formRef.current.setData({
+			service: { value: row.service._id, label: row.service.description },
+			name: row.name,
+			description: row.description,
+		});
 	};
 
 	useEffect(() => {
@@ -43,23 +46,19 @@ const Procedure = () => {
 	const handleSubmit = async (data) => {
 		try {
 			const schema = Yup.object().shape({
-				thumbnails: Yup.array().max(3, 'Limite de 5 fotos'),
 				service: Yup.string().ensure().required('Campo obrigatorio'),
 				name: Yup.string().required('Preencha o procedimento'),
 			});
 			await schema.validate(data, { abortEarly: false });
-			const sendData = new FormData();
-			data.thumbnails.forEach((thumb) => {
-				sendData.append('thumbnails', thumb);
-			});
-			sendData.append('service', data.service.value);
-			sendData.append('name', data.name);
-			sendData.append('description', data.description);
+			const sendData = {
+				service: data.service.value,
+				name: data.name,
+				description: data.description,
+			};
 			editMod ? dispatch(updateProcedure(sendData, data._id)) : dispatch(saveProcedure(sendData));
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
-				console.log(error.inner);
 				error.inner.forEach((erro) => {
 					errorMessages[erro.path] = erro.message;
 					formRef.current.setErrors(errorMessages);
@@ -76,13 +75,6 @@ const Procedure = () => {
 				</Col>
 			</Row>
 			<Form ref={formRef} onSubmit={handleSubmit}>
-				<Row>
-					<Col md={3}>
-						<Input name="_id" hidden />
-						<FileMultiUpload name="thumbnails" />
-					</Col>
-				</Row>
-
 				<Row className="mt-4">
 					<Col md={3}>
 						<Select name="service" label="Serviço" options={services.options} />
