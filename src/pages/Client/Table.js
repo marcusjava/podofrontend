@@ -79,7 +79,15 @@ const Table = ({ rowSelect, data }) => {
 	};
 
 	return (
-		<BootstrapTable data={data} striped hover version="4" selectRow={selectRowProp} pagination>
+		<BootstrapTable
+			data={data}
+			striped
+			hover
+			version="4"
+			selectRow={selectRowProp}
+			pagination
+			options={{ noDataText: 'Não há itens a exibir' }}
+		>
 			<TableHeaderColumn isKey dataField="id" hidden>
 				Id
 			</TableHeaderColumn>

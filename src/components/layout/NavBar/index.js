@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import './styles.css';
 import { LinkContainer } from 'react-router-bootstrap';
 import { FaHome, FaTools, FaNewspaper, FaKey, FaUsers, FaBriefcaseMedical, FaUserShield } from 'react-icons/fa';
-import { GiMorgueFeet } from 'react-icons/gi';
+import { GiMorgueFeet, GiWreckingBall } from 'react-icons/gi';
 import { FiLogOut, FiAlertTriangle } from 'react-icons/fi';
 import InputFilter from '../../../pages/Client/InputFilter';
 
@@ -65,6 +65,10 @@ const NavBar = () => {
 						<NavDropdown.Divider />
 						<NavDropdown.Item as={Link} to="/inicio/administrador/logs">
 							<FiAlertTriangle /> Logs de Alterações
+						</NavDropdown.Item>
+						<NavDropdown.Divider />
+						<NavDropdown.Item as={Link} to="/inicio/administrador/erro">
+							<GiWreckingBall /> Logs de Erros
 						</NavDropdown.Item>
 					</NavDropdown>
 				</Nav>

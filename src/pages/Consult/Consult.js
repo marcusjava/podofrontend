@@ -115,7 +115,7 @@ const Consult = () => {
 			await axios.delete(`/photos/${id}`);
 			setPhotos(photos.filter((photo) => photo._id !== id));
 		} catch (error) {
-			console.log(error);
+			toastr.error('Ocorreu um erro ao excluir a foto', error.response.data);
 		}
 	};
 

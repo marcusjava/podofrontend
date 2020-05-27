@@ -23,7 +23,7 @@ const InputFilter = () => {
 		>
 			{items.length > 0 &&
 				items.map((item, index) => (
-					<li className="media p-2 border border-primary rounded" key={item._id}>
+					<li className="media p-2 rounded" key={item._id}>
 						<img
 							className="mr-1"
 							src={item.avatar_url}

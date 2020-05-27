@@ -150,7 +150,7 @@ const Client = () => {
 							label="Nascimento"
 							style={{ width: '60%' }}
 							placeholder="XX/XX/XXXX"
-							maxLength={9}
+							maxLength={10}
 						/>
 					</Col>
 				</Row>

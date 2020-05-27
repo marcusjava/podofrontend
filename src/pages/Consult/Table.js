@@ -18,7 +18,7 @@ registerLocale('pt-br', br);
 
 const Table = ({ client_id }) => {
 	const dispatch = useDispatch();
-	const { items } = useSelector((state) => state.consult.consults);
+	const { items, loading } = useSelector((state) => state.consult.consults);
 
 	const [dateI, setDateI] = useState(undefined);
 	const [dateF, setDateF] = useState(undefined);
@@ -173,11 +173,18 @@ const Table = ({ client_id }) => {
 		</div>
 	);
 
-	return items.length === 0 ? (
+	return loading ? (
 		<Spinner />
 	) : (
 		<>
-			<BootstrapTable data={items} striped hover version="4" pagination>
+			<BootstrapTable
+				data={items}
+				striped
+				hover
+				version="4"
+				pagination
+				options={{ noDataText: 'Não há itens a exibir' }}
+			>
 				<TableHeaderColumn isKey dataField="id" hidden>
 					Id
 				</TableHeaderColumn>

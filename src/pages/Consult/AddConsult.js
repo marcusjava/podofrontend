@@ -63,7 +63,7 @@ function AddConsult() {
 				const { data } = error.response;
 				errorMessages[data.path] = data.message;
 				formRef.current.setErrors(errorMessages);
-				toastr.error('Já exsite uma consulta marcada para este horario');
+				toastr.error('Já existe uma consulta marcada para este horario');
 			}
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
