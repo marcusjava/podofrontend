@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Badge, Image } from 'react-bootstrap';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { Procedures } from '../../redux/actions/procedureActions';
 import './styles.css';

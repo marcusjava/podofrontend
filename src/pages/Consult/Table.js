@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Badge, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { consults, updateConsult } from '../../redux/actions/consultActions';
@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import EditConsult from './EditConsult';
 import br from 'date-fns/locale/pt-BR';
 import { toastr } from 'react-redux-toastr';
+import Spinner from '../../components/common/Spinner';
 import './styles.css';
 
 registerLocale('pt-br', br);
@@ -172,7 +173,9 @@ const Table = ({ client_id }) => {
 		</div>
 	);
 
-	return (
+	return items.length === 0 ? (
+		<Spinner />
+	) : (
 		<>
 			<BootstrapTable data={items} striped hover version="4" pagination>
 				<TableHeaderColumn isKey dataField="id" hidden>

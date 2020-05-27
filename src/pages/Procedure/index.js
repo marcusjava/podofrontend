@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
-import { Input, TextArea, FileMultiUpload, Select } from '../../components/common/Form';
+import { Input, TextArea, Select } from '../../components/common/Form';
 import Table from './Table';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveProcedure, updateProcedure } from '../../redux/actions/procedureActions';
