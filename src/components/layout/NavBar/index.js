@@ -67,7 +67,7 @@ const NavBar = () => {
 							<FiAlertTriangle /> Logs de Alterações
 						</NavDropdown.Item>
 						<NavDropdown.Divider />
-						<NavDropdown.Item as={Link} to="/inicio/administrador/erro">
+						<NavDropdown.Item href="http://localhost:3001/logs/" target="_blank">
 							<GiWreckingBall /> Logs de Erros
 						</NavDropdown.Item>
 					</NavDropdown>
