@@ -67,7 +67,7 @@ const NavBar = () => {
 							<FiAlertTriangle /> Logs de Alterações
 						</NavDropdown.Item>
 						<NavDropdown.Divider />
-						<NavDropdown.Item href="http://localhost:3001/logs/" target="_blank">
+						<NavDropdown.Item href={process.env.REACT_APP_LOG_URL} target="_blank">
 							<GiWreckingBall /> Logs de Erros
 						</NavDropdown.Item>
 					</NavDropdown>
