@@ -7,6 +7,7 @@ import { Form } from '@unform/web';
 import { FileUpload, Input, Select } from '../../components/common/Form';
 import * as Yup from 'yup';
 import Table from './Table';
+import axios from 'axios';
 
 const Client = () => {
 	const [editMod, setEditMode] = useState(false);
@@ -14,13 +15,33 @@ const Client = () => {
 	const client = useSelector((state) => state.client.client);
 	const { items } = useSelector((state) => state.client.clients);
 
+	const [uf, setUF] = useState([]);
+	const [selectedUF, setSelectedUF] = useState('');
+	const [city, setCity] = useState([]);
+	const [selectedCity, setSelectedCity] = useState('');
+
 	const dispatch = useDispatch();
 
 	const formRef = useRef(null);
 
 	useEffect(() => {
+		async function getUF() {
+			const response = await axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
+			setUF(response.data);
+		}
 		dispatch(Clients());
+		getUF();
 	}, [dispatch]);
+
+	useEffect(() => {
+		async function getCity() {
+			const response = await axios.get(
+				`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUF}/municipios`
+			);
+			setCity(response.data);
+		}
+		getCity();
+	}, [selectedUF]);
 
 	useEffect(() => {
 		if (client.success === true) {
@@ -163,12 +184,21 @@ const Client = () => {
 					</Col>
 				</Row>
 				<Row>
-					<Col md={3}>
-						<Input name="address.city" label="Cidade" maxLength={50} />
+					<Col md={2}>
+						<Select
+							label="Estado"
+							name="address.state"
+							onChange={(data) => setSelectedUF(data.value)}
+							options={uf.map((item) => ({ value: item.sigla, label: item.sigla }))}
+						/>
 					</Col>
 
 					<Col md={3}>
-						<Input name="address.state" label="Estado" maxLength={2} style={{ width: '20%' }} />
+						<Select
+							label="Cidade"
+							name="address.city"
+							options={city.map((item) => ({ value: item.nome, label: item.nome }))}
+						/>
 					</Col>
 					<Col md={3}>
 						<Input name="address.cep" label="CEP" style={{ width: '50%' }} maxLength={10} />

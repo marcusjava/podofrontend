@@ -90,12 +90,12 @@ const ClientDetail = () => {
 				</Col>
 				<Col md={3}>
 					<p>
-						<strong>Cidade</strong> - {item.address && item.address.city}
+						<strong>Cidade</strong> - {item.address && item.address.city.label}
 					</p>
 				</Col>
 				<Col md={3}>
 					<p>
-						<strong>Estado</strong> - {item.address && item.address.state}
+						<strong>Estado</strong> - {item.address && item.address.state.label}
 					</p>
 				</Col>
 			</Row>
