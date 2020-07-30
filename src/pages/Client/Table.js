@@ -1,27 +1,27 @@
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Tooltip, OverlayTrigger, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { Clients } from '../../redux/actions/clientActions';
-import { MdRemoveRedEye } from 'react-icons/md';
+import { MdRemoveRedEye, MdEdit } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 const Table = ({ rowSelect, data }) => {
 	const dispatch = useDispatch();
 
-	const selectRowProp = {
-		mode: 'radio',
-		clickToSelect: false,
-		onSelect: (row, isSelected, e) => rowSelect(row, isSelected),
-	};
-
 	const actionFormat = (cell, row) => {
 		return (
 			<div className="form-iline">
-				<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit">Ver Cliente</Tooltip>}>
+				<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit">Ver</Tooltip>}>
 					<Link to={`/inicio/clientes/detalhes/${row._id}`}>
 						<MdRemoveRedEye size={24} />
 					</Link>
+				</OverlayTrigger>
+				<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit">Editar</Tooltip>}>
+					<Button onClick={() => rowSelect(row)} variant="link">
+						<MdEdit size={24} />
+						&nbsp;
+					</Button>
 				</OverlayTrigger>
 			</div>
 		);
@@ -84,7 +84,6 @@ const Table = ({ rowSelect, data }) => {
 			striped
 			hover
 			version="4"
-			selectRow={selectRowProp}
 			pagination
 			options={{ noDataText: 'Não há itens a exibir' }}
 		>

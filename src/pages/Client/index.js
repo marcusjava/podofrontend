@@ -5,6 +5,7 @@ import { saveClient, updateClient, Clients } from '../../redux/actions/clientAct
 import { withRouter } from 'react-router-dom';
 import { Form } from '@unform/web';
 import { FileUpload, Input, Select } from '../../components/common/Form';
+import Spinner from '../../components/common/Spinner';
 import * as Yup from 'yup';
 import Table from './Table';
 import axios from 'axios';
@@ -13,7 +14,7 @@ const Client = () => {
 	const [editMod, setEditMode] = useState(false);
 
 	const client = useSelector((state) => state.client.client);
-	const { items } = useSelector((state) => state.client.clients);
+	const { items, loading } = useSelector((state) => state.client.clients);
 
 	const [uf, setUF] = useState([]);
 	const [selectedUF, setSelectedUF] = useState('');
@@ -57,7 +58,6 @@ const Client = () => {
 	}, [client.success, client.error]);
 
 	const rowSelect = (row) => {
-		console.log(row);
 		setEditMode(true);
 		formRef.current.setFieldValue('id', row._id);
 		formRef.current.setFieldValue('name', row.name);
@@ -247,7 +247,7 @@ const Client = () => {
 			</Form>
 			<Row>
 				<Col md={12} className="my-4">
-					<Table rowSelect={rowSelect} data={items} />
+					{loading ? <Spinner width={50} /> : <Table rowSelect={rowSelect} data={items} />}
 				</Col>
 			</Row>
 		</Fragment>
