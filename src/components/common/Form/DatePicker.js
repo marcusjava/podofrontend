@@ -7,7 +7,7 @@ import br from 'date-fns/locale/pt-BR';
 
 registerLocale('pt-br', br);
 
-const DatePicker = ({ name, label, ...rest }) => {
+const DatePicker = ({ name, label, showTimeSelect, dateFormat, minDate, ...rest }) => {
 	const datepickerRef = useRef(null);
 
 	const { fieldName, registerField, defaultValue, error } = useField(name);
@@ -36,10 +36,10 @@ const DatePicker = ({ name, label, ...rest }) => {
 				isClearable={true}
 				timeFormat="HH:mm"
 				timeIntervals={10}
-				showTimeSelect={true}
+				showTimeSelect={showTimeSelect}
 				timeCaption="Hora"
-				dateFormat="dd/MM/yyyy HH:mm"
-				minDate={new Date()}
+				dateFormat={dateFormat}
+				minDate={minDate}
 				locale="pt-br"
 				{...rest}
 			/>

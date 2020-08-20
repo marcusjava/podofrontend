@@ -18,7 +18,6 @@ import { toastr } from 'react-redux-toastr';
 import PhotoList from '../../components/consult/PhotoList';
 import { Link } from 'react-router-dom';
 import { FaPrint } from 'react-icons/fa';
-import { useHistory } from 'react-router-dom';
 
 dayjs.extend(utc);
 
@@ -73,49 +72,52 @@ const Consult = () => {
 	const formRef = useRef(null);
 	const dispatch = useDispatch();
 	const { id } = useParams();
-	const history = useHistory();
 	const [item, setItem] = useState({});
-	const [photos, setPhotos] = useState([]);
+	const [loading, setLoading] = useState(false);
 
 	const { options } = useSelector((state) => state.procedure.procedures);
 
+	async function getConsult() {
+		const response = await axios.get(`/consults/${id}`);
+		setItem(response.data);
+	}
+
 	useEffect(() => {
 		dispatch(Procedures());
-		async function getConsult() {
-			const response = await axios.get(`/consults/${id}`);
-			setItem(response.data);
-		}
 
 		getConsult();
 	}, [dispatch, id]);
 
-	async function getPhotos() {
-		const response = await axios.get(`/photos/${id}`);
-		setPhotos(response.data);
-	}
-
-	useEffect(() => {
-		getPhotos();
-	}, []);
-
-	const handleUpload = async (file) => {
-		const fileData = new FormData();
-		fileData.append('photo', file);
+	const handleDeletePhoto = async (e, photoId) => {
+		e.preventDefault();
 		try {
-			const response = await axios.post(`/photos/${id}`, fileData);
-			setPhotos([...photos, response.data]);
+			const dialog = window.confirm('Tem certeza que deseja excluir a foto?');
+			if (dialog === true) {
+				setLoading(true);
+				const response = await axios.delete(`/consults/${id}/photos/${photoId}`);
+				if (response.status === 200) {
+					setItem(response.data);
+					setLoading(false);
+					toastr.success('Foto excluida com sucesso!');
+				}
+			}
 		} catch (error) {
-			toastr.error('Ocorreu um erro ao fazer o upload da foto', error.response.data);
+			toastr.error('Ocorreu um erro ao excluir a foto', error.response.data.message);
 		}
 	};
 
-	const handleDeletePhoto = async (e, id) => {
-		e.preventDefault();
+	const savePhoto = async (files) => {
 		try {
-			await axios.delete(`/photos/${id}`);
-			setPhotos(photos.filter((photo) => photo._id !== id));
+			const photoData = new FormData();
+			files.forEach((file) => photoData.append('photos', file));
+			const response = await axios.put(`/consults/${id}/photos`, photoData);
+			if (response.status === 200) {
+				setItem(response.data);
+				formRef.current.clearField('files');
+				window.scrollTo(0, 0);
+			}
 		} catch (error) {
-			toastr.error('Ocorreu um erro ao excluir a foto', error.response.data);
+			toastr.error('Ocorreu um erro ao salvar a foto', error.response.data.message);
 		}
 	};
 
@@ -137,35 +139,37 @@ const Consult = () => {
 				anamnese: data.anamnese,
 				status: { value: '1', label: 'Realizada' },
 			};
-			try {
-				const dialog = window.confirm('Tem certeza que deseja encerrar a consulta?');
 
-				if (dialog === true) {
-					data.files.forEach(handleUpload);
-					const response = await axios.put(`/consults/${data._id}`, sendData);
-					if (response.status === 200) {
-						toastr.success('Consulta atualizada com sucesso');
-						history.push('/inicio/principal');
-					}
+			const dialog = window.confirm('Tem certeza que deseja encerrar a consulta?');
+
+			if (dialog === true) {
+				setLoading(true);
+				const response = await axios.put(`/consults/${data._id}`, sendData);
+				savePhoto(data.files);
+
+				if (response.status === 200) {
+					setItem(response.data);
+					setLoading(false);
+					toastr.success('Consulta atualizada com sucesso');
 				}
-			} catch (error) {
-				const { data } = error.response;
-				const errorMessages = {};
-				errorMessages[data.path] = data.message;
-				formRef.current.setErrors(errorMessages);
 			}
 		} catch (error) {
+			const { data } = error.response;
+
+			const errorMessages = {};
 			if (error instanceof Yup.ValidationError) {
-				const errorMessages = {};
 				error.inner.forEach((erro) => {
 					errorMessages[erro.path] = erro.message;
 					formRef.current.setErrors(errorMessages);
 				});
 			}
+			errorMessages[data.path] = data.message;
+			formRef.current.setErrors(errorMessages);
+			toastr.error('Ocorreu um erro ao salvar a consulta', data.message);
 		}
 	};
 
-	return Object.entries(item).length === 0 ? (
+	return Object.entries(item).length === 0 || loading ? (
 		<Spinner />
 	) : (
 		<Form
@@ -194,7 +198,7 @@ const Consult = () => {
 				</Col>
 			</Row>
 			<Row>
-				<Col className="text-right">
+				<Col className="text-right d-flex flex-column">
 					{item.status.value === '1' && (
 						<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit">Imprimir Ficha</Tooltip>}>
 							<Link to={`/ficha/${item.id}`}>
@@ -202,6 +206,8 @@ const Consult = () => {
 							</Link>
 						</OverlayTrigger>
 					)}
+
+					<Link to={`/inicio/consultas/${item.client.id}`}>Ver anteriores</Link>
 				</Col>
 			</Row>
 			<Row>
@@ -240,10 +246,10 @@ const Consult = () => {
 			</Row>
 			<Row>
 				<Col md={12}>
-					{photos.length === 0 ? (
+					{item.photos.length === 0 ? (
 						<p className="text-center text-muted">Sem fotos</p>
 					) : (
-						<PhotoList photos={photos} handleDeletePhoto={handleDeletePhoto} />
+						<PhotoList photos={item.photos} handleDeletePhoto={handleDeletePhoto} />
 					)}
 				</Col>
 			</Row>

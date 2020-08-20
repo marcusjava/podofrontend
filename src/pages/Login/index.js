@@ -4,15 +4,17 @@ import Logo from '../../images/Logo2.png';
 import { Row, Col, Container } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { login } from '../../redux/actions/userActions';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 import { Form } from '@unform/web';
 import { Input } from '../../components/common/Form';
 import * as Yup from 'yup';
 
-const Login = ({ history }) => {
+const Login = () => {
 	const formRef = useRef(null);
 	const { authenticated, error } = useSelector((state) => state.user.user);
 	const dispatch = useDispatch();
+
+	const history = useHistory();
 
 	useEffect(() => {
 		if (authenticated) {
@@ -73,4 +75,4 @@ const Login = ({ history }) => {
 	);
 };
 
-export default withRouter(Login);
+export default Login;

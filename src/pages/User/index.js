@@ -3,7 +3,7 @@ import './styles.css';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
-import Table from './Table';
+import Table from '../../components/user/Table';
 import { FileUpload, Input, CheckBox, Select } from '../../components/common/Form';
 import { useSelector, useDispatch } from 'react-redux';
 import { register, updateUser } from '../../redux/actions/userActions';

@@ -3,19 +3,18 @@ import PropTypes from 'prop-types';
 import { Row, Col, Card } from 'react-bootstrap';
 import { FaTrashAlt } from 'react-icons/fa';
 
-const PhotoList = ({ photos, handleDeletePhoto }) => {
+const PhotoList = ({ photos, handleDeletePhoto, width = '503px', height = '339px' }) => {
 	return (
 		<Row>
 			{photos.map((photo) => (
 				<Col md={4} key={photo._id}>
-					<Card>
+					<Card style={{ width }}>
 						<a href={photo.url} target="_blank" rel="noopener noreferrer">
-							<Card.Img variant="top" src={photo.url} style={{ width: '503px', height: '339px' }} />
+							<Card.Img variant="top" src={photo.url} style={{ width, height }} />
 						</a>
 
 						<Card.Body>
 							<Card.Text>
-								{' '}
 								<strong>{photo.name}</strong>
 								<button className="btn btn-link" onClick={(e) => handleDeletePhoto(e, photo._id)}>
 									<FaTrashAlt />
@@ -31,7 +30,6 @@ const PhotoList = ({ photos, handleDeletePhoto }) => {
 
 PhotoList.propTypes = {
 	photos: PropTypes.array.isRequired,
-	handleDeletePhoto: PropTypes.func.isRequired,
 };
 
 export default PhotoList;

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { PwdModal } from '../../components/common/Form';
+import { PwdModal } from '../common/Form';
 import classnames from 'classnames';
 import { getUsers } from '../../redux/actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';

@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col, Row, Container, Button } from 'react-bootstrap';
 import Table from '../Consult/Table';
 import AddConsult from '../Consult/AddConsult';
 import { BsPersonFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { consults } from '../../redux/actions/consultActions';
+import dayjs from 'dayjs';
 
 const Dashboard = () => {
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(consults({ start: dayjs(Date.now()).format('YYYY-MM-DDTHH:mm:ss.sssZ') }));
+	});
 	return (
 		<Container fluid>
 			<Row>

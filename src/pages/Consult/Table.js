@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Badge, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { consults, updateConsult } from '../../redux/actions/consultActions';
@@ -24,13 +24,7 @@ const Table = ({ client_id }) => {
 	const [dateF, setDateF] = useState(undefined);
 	const [client, setClient] = useState('');
 
-	useEffect(() => {
-		if (client_id) {
-			dispatch(consults({ client_id }));
-		} else {
-			dispatch(consults());
-		}
-	}, [dispatch, client_id]);
+	const table = useRef(null);
 
 	const proceduresFormat = (cell, row) => {
 		return (
@@ -182,6 +176,7 @@ const Table = ({ client_id }) => {
 				striped
 				hover
 				version="4"
+				ref={table}
 				pagination
 				options={{ noDataText: 'Não há itens a exibir' }}
 			>
@@ -239,7 +234,7 @@ const Table = ({ client_id }) => {
 				<TableHeaderColumn dataField="type_consult" width="120" dataFormat={typeFormat}>
 					Tipo consulta
 				</TableHeaderColumn>
-				<TableHeaderColumn dataField="status" dataFormat={statusFormat} width="100">
+				<TableHeaderColumn dataField="status" dataFormat={statusFormat} width="100" dataSort>
 					Status
 				</TableHeaderColumn>
 				<TableHeaderColumn width="160" dataFormat={actionsFormat}>

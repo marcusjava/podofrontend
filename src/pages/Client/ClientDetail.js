@@ -6,11 +6,15 @@ import './styles.css';
 import Table from '../Consult/Table';
 import Spinner from '../../components/common/Spinner';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { consults } from '../../redux/actions/consultActions';
 
 const ClientDetail = () => {
 	const { id } = useParams();
 
 	const [item, setItem] = useState({});
+
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		async function getClient() {
@@ -19,6 +23,7 @@ const ClientDetail = () => {
 		}
 
 		getClient();
+		dispatch(consults({ client_id: id }));
 	}, [id]);
 
 	return Object.entries(item).length === 0 ? (
@@ -120,7 +125,7 @@ const ClientDetail = () => {
 			</Row>
 			<Row className="mt-4">
 				<Col md={12}>
-					<Table client_id={item.id} />
+					<Table />
 				</Col>
 			</Row>
 		</>

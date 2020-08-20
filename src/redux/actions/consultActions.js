@@ -14,7 +14,6 @@ import axios from 'axios';
 
 export const saveConsult = (data) => (dispatch) => {
 	dispatch({ type: FETCH_CONSULT_REQUEST });
-	console.log('Save consult action', data);
 	return axios
 		.post('/consults', data)
 		.then((response) => {

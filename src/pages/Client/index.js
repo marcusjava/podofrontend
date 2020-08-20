@@ -9,6 +9,8 @@ import Spinner from '../../components/common/Spinner';
 import * as Yup from 'yup';
 import Table from './Table';
 import axios from 'axios';
+import { DatePicker } from '../../components/common/Form';
+import { parseISO } from 'date-fns';
 
 const Client = () => {
 	const [editMod, setEditMode] = useState(false);
@@ -58,6 +60,7 @@ const Client = () => {
 	}, [client.success, client.error]);
 
 	const rowSelect = (row) => {
+		console.log(row);
 		setEditMode(true);
 		formRef.current.setFieldValue('id', row._id);
 		formRef.current.setFieldValue('name', row.name);
@@ -82,13 +85,20 @@ const Client = () => {
 			const schema = Yup.object().shape({
 				name: Yup.string().required('Informe o nome do cliente'),
 				email: Yup.string().email('Formato de email invalido'),
+				cpf: Yup.string().required('Informe o CPF'),
 				address: Yup.object().shape({
 					street: Yup.string().required('Rua obrigatoria'),
 					neighborhood: Yup.string().required('Bairro obrigatorio'),
 					city: Yup.string().required('Cidade obrigatoria'),
 					state: Yup.string().required('Estado obrigatoria'),
 				}),
-				contact: Yup.string().required('Informe ao menos um contato'),
+				contact: Yup.string()
+					.matches(/(\(?\d{2}\)?\s)?(\d{4,5}\-\d{4})/g, 'Formato incorreto')
+					.required('Informe ao menos um contato'),
+
+				nasc: Yup.string()
+					.matches(/^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{2}$/i, 'Formato incorreto')
+					.required('Informe a data de nascimento'),
 			});
 			await schema.validate(data, { abortEarly: false });
 			const sendData = new FormData();
@@ -108,6 +118,7 @@ const Client = () => {
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
+				console.log(error.inner, data);
 				error.inner.forEach((erro) => {
 					errorMessages[erro.path] = erro.message;
 					formRef.current.setErrors(errorMessages);
@@ -161,18 +172,13 @@ const Client = () => {
 							label="Telefone"
 							style={{ width: '60%' }}
 							placeholder="XX XXXXX-XXXX"
-							maxLength={12}
+							maxLength={13}
 						/>
 					</Col>
-
-					<Col md={3}>
-						<Input
-							name="nasc"
-							label="Nascimento"
-							style={{ width: '60%' }}
-							placeholder="XX/XX/XXXX"
-							maxLength={10}
-						/>
+				</Row>
+				<Row>
+					<Col md={2}>
+						<Input name="nasc" label="Nasc" maxLength={8} style={{ width: '40%' }} placeholder="DD/MM/AA" />
 					</Col>
 				</Row>
 				<Row>
@@ -201,7 +207,7 @@ const Client = () => {
 						/>
 					</Col>
 					<Col md={3}>
-						<Input name="address.cep" label="CEP" style={{ width: '50%' }} maxLength={10} />
+						<Input name="address.cep" label="CEP" style={{ width: '50%' }} maxLength={9} />
 					</Col>
 				</Row>
 

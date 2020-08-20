@@ -11,6 +11,7 @@ import { FaHome, FaTools, FaNewspaper, FaKey, FaUsers, FaBriefcaseMedical, FaUse
 import { GiMorgueFeet, GiWreckingBall } from 'react-icons/gi';
 import { FiLogOut, FiAlertTriangle } from 'react-icons/fi';
 import InputFilter from '../../../pages/Client/InputFilter';
+import PwdChange from '../../user/PwdChange';
 
 const NavBar = () => {
 	const { credentials } = useSelector((state) => state.user.user);
@@ -47,9 +48,6 @@ const NavBar = () => {
 							</span>
 						}
 					>
-						<NavDropdown.Item as={Link} to="/inicio/clientes">
-							<GiMorgueFeet /> Clientes
-						</NavDropdown.Item>
 						<NavDropdown.Divider />
 						<NavDropdown.Item as={Link} to="/inicio/administrador/usuario">
 							<FaUsers /> Usuarios
@@ -91,8 +89,8 @@ const NavBar = () => {
 				>
 					<NavDropdown.Item>{credentials.name}</NavDropdown.Item>
 					<NavDropdown.Divider />
-					<NavDropdown.Item as={Link} to="/inicio/administrador/clientes">
-						<FaKey /> Alterar senha
+					<NavDropdown.Item as={Link} to="/inicio/administrador/usuario/pwd_change">
+						<FaKey /> Alterar Senha
 					</NavDropdown.Item>
 
 					<NavDropdown.Divider />

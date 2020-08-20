@@ -52,7 +52,7 @@ function AddConsult() {
 			try {
 				const response = await axios.post('/consults', sendData);
 				if (response.status === 201) {
-					dispatch(consults());
+					dispatch(consults({ start: dayjs(Date.now()).format('YYYY-MM-DDTHH:mm:ss.sssZ') }));
 					formRef.current.setErrors({});
 					formRef.current.reset();
 					setShow(false);
@@ -99,7 +99,13 @@ function AddConsult() {
 					<Form ref={formRef} onSubmit={handleSubmit}>
 						<Row>
 							<Col md={6}>
-								<DatePicker placeholderText="Data/hora" name="date" />
+								<DatePicker
+									placeholderText="Data/hora"
+									name="date"
+									dateFormat="dd/MM/yyyy HH:mm"
+									minDate={new Date()}
+									showTimeSelect={true}
+								/>
 							</Col>
 						</Row>
 						<Row>

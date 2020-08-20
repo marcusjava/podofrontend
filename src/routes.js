@@ -24,6 +24,11 @@ const Procedure = Loadable({
 	loading: Loading,
 });
 
+const PwdChange = Loadable({
+	loader: () => import('./pages/PwdChange'),
+	loading: Loading,
+});
+
 const CadClient = Loadable({
 	loader: () => import('./pages/Client'),
 	loading: Loading,
@@ -51,11 +56,12 @@ const Logs = Loadable({
 
 const routes = [
 	{ path: '/inicio/principal', name: 'Inicio', Component: Dashboard },
-	{ path: '/inicio/consultas', name: 'Consultas', Component: Consults },
+	{ path: '/inicio/consultas/:id', name: 'Consultas', Component: Consults },
 	{ path: '/inicio/consulta/:id', name: 'Detalhes Consulta', Component: Consult },
 	{ path: '/inicio/clientes', exact: true, name: 'Cadadastro Clientes', Component: CadClient },
 	{ path: '/inicio/clientes/detalhes/:id', name: 'Detalhes Cliente', Component: ClientDetail },
-	{ path: '/inicio/administrador/usuario', name: 'Usuarios', Component: User },
+	{ path: '/inicio/administrador/usuario', name: 'Usuarios', Component: User, exact: true },
+	{ path: '/inicio/administrador/usuario/pwd_change', name: 'Alterar Senha', Component: PwdChange },
 	{ path: '/inicio/administrador/servico', name: 'Serviços', Component: Service },
 	{ path: '/inicio/administrador/procedimento', name: 'PProcedimentos', Component: Procedure },
 	{ path: '/inicio/administrador/logs', name: 'Logs Sistema', Component: Logs },

@@ -11,7 +11,6 @@ const FichaConsult = () => {
 	const { id } = useParams();
 
 	const [item, setItem] = useState({});
-	const [photos, setPhotos] = useState([]);
 
 	useEffect(() => {
 		async function getConsult() {
@@ -20,14 +19,6 @@ const FichaConsult = () => {
 		}
 
 		getConsult();
-	}, [id]);
-
-	useEffect(() => {
-		async function getPhotos() {
-			const response = await axios.get(`/photos/${id}`);
-			setPhotos(response.data);
-		}
-		getPhotos();
 	}, [id]);
 
 	return Object.entries(item).length === 0 ? (
@@ -746,12 +737,12 @@ const FichaConsult = () => {
 					</Col>
 				</Row>
 				<Row>
-					{photos.length === 0 ? (
+					{item.photos.length === 0 ? (
 						<Col>
 							<p className="text-muted text-center">Sem fotos</p>
 						</Col>
 					) : (
-						photos.map((photo) => (
+						item.photos.map((photo) => (
 							<Col md={6} className="mt-2" key={photo._id}>
 								<Image src={photo.url} style={{ width: '300px', height: '150px' }} />
 							</Col>

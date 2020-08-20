@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Clients } from '../../redux/actions/clientActions';
 import { Row, Col, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const InputFilter = () => {
 	const dispatch = useDispatch();
 	const { items } = useSelector((state) => state.client.clients);
 	const [value, setValue] = useState('');
 
+	const history = useHistory();
+
 	const searchFilter = (e) => {
 		const text = e.target.value;
 		if (text.length >= 3) {
 			dispatch(Clients({ name: text }));
 		}
+	};
+
+	const goToDetail = (id) => {
+		setValue('');
+		history.push(`/inicio/clientes/detalhes/${id}`);
 	};
 
 	const listItems = value.length >= 3 && (
@@ -33,7 +41,9 @@ const InputFilter = () => {
 						<div className="media-body">
 							<p>{item.name}</p>
 							<div className="text-right">
-								<Link to={`/inicio/clientes/detalhes/${item._id}`}>Ver</Link>
+								<button className="btn btn-link" onClick={() => goToDetail(item._id)}>
+									Ver
+								</button>
 							</div>
 						</div>
 					</li>
