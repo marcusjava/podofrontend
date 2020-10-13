@@ -6,5 +6,6 @@ import PwdModal from './PwdModal';
 import TextArea from './TextArea';
 import FileMultiUpload from './FileMultiUpload';
 import DatePicker from './DatePicker';
+import InputMask from './InputMask';
 
-export { Input, Select, FileUpload, CheckBox, PwdModal, TextArea, FileMultiUpload, DatePicker };
+export { Input, Select, FileUpload, CheckBox, PwdModal, TextArea, FileMultiUpload, DatePicker, InputMask };

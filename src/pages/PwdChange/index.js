@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { toastr } from 'react-redux-toastr';
 import { Row, Col, Button, Modal } from 'react-bootstrap';
-import { FaKey } from 'react-icons/fa';
 import { Form } from '@unform/web';
 import { Input } from '../../components/common/Form';
 import * as Yup from 'yup';

@@ -31,10 +31,6 @@
 	font-size: 10;
 }
 
-.dark-overlay {
-	background-color: #fefefe;
-}
-
 @page {
 	size: A4;
 	margin: 0;

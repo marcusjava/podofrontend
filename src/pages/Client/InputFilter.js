@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Clients } from '../../redux/actions/clientActions';
 import { Row, Col, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
 const InputFilter = () => {

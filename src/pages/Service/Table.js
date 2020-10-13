@@ -1,20 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import { Tooltip, OverlayTrigger, Button } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { getServices } from '../../redux/actions/serviceActions';
+import Spinner from '../../components/common/Spinner';
+import { MdEdit } from 'react-icons/md';
 
-const Table = ({ data, rowSelect }) => {
-	const selectRowProp = {
-		mode: 'radio',
-		clickToSelect: false,
-		onSelect: (row, isSelected, e) => rowSelect(row, isSelected),
+const Table = ({ rowSelect }) => {
+	const dispatch = useDispatch();
+
+	const { items, loading } = useSelector((state) => state.service.services);
+
+	useEffect(() => {
+		dispatch(getServices());
+	}, [dispatch]);
+
+	const actionFormat = (cell, row) => {
+		return (
+			<div className="form-iline">
+				<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit">Editar</Tooltip>}>
+					<Button onClick={() => rowSelect(row)} variant="link">
+						<MdEdit size={24} />
+						&nbsp;
+					</Button>
+				</OverlayTrigger>
+			</div>
+		);
 	};
 
-	return (
+	return loading ? (
+		<Spinner />
+	) : (
 		<BootstrapTable
-			data={data}
+			data={items}
 			striped
 			hover
 			version="4"
-			selectRow={selectRowProp}
 			pagination
 			options={{ noDataText: 'Não há itens a exibir' }}
 		>
@@ -30,6 +51,9 @@ const Table = ({ data, rowSelect }) => {
 				Descrição
 			</TableHeaderColumn>
 			<TableHeaderColumn dataField="observations">Observações</TableHeaderColumn>
+			<TableHeaderColumn width="90" dataFormat={actionFormat}>
+				Ações
+			</TableHeaderColumn>
 		</BootstrapTable>
 	);
 };

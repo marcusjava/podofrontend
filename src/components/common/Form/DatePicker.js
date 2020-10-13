@@ -7,7 +7,7 @@ import br from 'date-fns/locale/pt-BR';
 
 registerLocale('pt-br', br);
 
-const DatePicker = ({ name, label, showTimeSelect, dateFormat, minDate, ...rest }) => {
+const DatePicker = ({ name, label, showTimeSelect = true, dateFormat = 'dd/MM/yyyy HH:mm', minDate, ...rest }) => {
 	const datepickerRef = useRef(null);
 
 	const { fieldName, registerField, defaultValue, error } = useField(name);

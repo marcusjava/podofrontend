@@ -63,7 +63,7 @@ const routes = [
 	{ path: '/inicio/administrador/usuario', name: 'Usuarios', Component: User, exact: true },
 	{ path: '/inicio/administrador/usuario/pwd_change', name: 'Alterar Senha', Component: PwdChange },
 	{ path: '/inicio/administrador/servico', name: 'Serviços', Component: Service },
-	{ path: '/inicio/administrador/procedimento', name: 'PProcedimentos', Component: Procedure },
+	{ path: '/inicio/administrador/procedimento', name: 'Procedimentos', Component: Procedure },
 	{ path: '/inicio/administrador/logs', name: 'Logs Sistema', Component: Logs },
 ];
 

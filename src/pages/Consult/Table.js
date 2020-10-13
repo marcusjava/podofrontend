@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Badge, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { consults, updateConsult } from '../../redux/actions/consultActions';
@@ -73,6 +73,7 @@ const Table = ({ client_id }) => {
 	};
 
 	const cancelConsult = (e, row) => {
+		console.log(row);
 		e.preventDefault();
 		if (row.status.value === '1') {
 			toastr.error('Consulta realizada não pode ser cancelada!');
@@ -84,6 +85,7 @@ const Table = ({ client_id }) => {
 		}
 		const confirm = window.confirm('Tem certeza que deseja cancelar a consulta?');
 		if (confirm === true) {
+			row.client = row.client._id;
 			row.status = { value: 2, label: 'Cancelada' };
 			dispatch(updateConsult(row));
 		}

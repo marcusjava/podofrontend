@@ -1,17 +1,18 @@
 import React, { useRef, useEffect } from 'react';
-import './styles.css';
+
 import Logo from '../../images/Logo2.png';
 import { Row, Col, Container } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { login } from '../../redux/actions/userActions';
-import { withRouter, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Form } from '@unform/web';
 import { Input } from '../../components/common/Form';
 import * as Yup from 'yup';
+import './styles.css';
 
 const Login = () => {
 	const formRef = useRef(null);
-	const { authenticated, error } = useSelector((state) => state.user.user);
+	const { authenticated, error, loading } = useSelector((state) => state.user.user);
 	const dispatch = useDispatch();
 
 	const history = useHistory();
@@ -63,7 +64,7 @@ const Login = () => {
 							<Form ref={formRef} onSubmit={handleSubmit}>
 								<Input name="email" label="Email" />
 								<Input type="password" name="password" label="Senha" />
-								<button type="submit" className="btn btn-info btn-block mt-4">
+								<button type="submit" className="btn btn-info btn-block mt-4" disabled={loading}>
 									Entrar
 								</button>
 							</Form>

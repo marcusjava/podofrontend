@@ -1,6 +1,7 @@
 import {
 	FETCH_PROCEDURE_REQUEST,
 	FETCH_PROCEDURE_SUCCESS,
+	UPDATE_PROCEDURE_SUCCESS,
 	FETCH_PROCEDURE_ERROR,
 	FETCH_PROCEDURES_REQUEST,
 	FETCH_PROCEDURES_SUCCESS,
@@ -9,7 +10,7 @@ import {
 
 const initialState = {
 	procedures: {
-		loading: true,
+		loading: false,
 		success: false,
 		error: {},
 		items: [],
@@ -37,9 +38,31 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				procedure: {
+					...state.procedure,
 					item: action.payload,
 					loading: false,
 					success: true,
+				},
+				procedures: {
+					...state.procedures,
+					items: [action.payload, ...state.procedures.items],
+				},
+			};
+
+		case UPDATE_PROCEDURE_SUCCESS:
+			const index = state.procedures.items.findIndex((item) => item._id === action.payload._id);
+			const newArray = [...state.procedures.items];
+			newArray[index] = action.payload;
+			return {
+				...state,
+				procedure: {
+					...state.procedure,
+					loading: false,
+					success: true,
+				},
+				procedures: {
+					...state.procedures,
+					items: newArray,
 				},
 			};
 
@@ -66,7 +89,7 @@ export default (state = initialState, action) => {
 				...state,
 				procedures: {
 					items: action.payload,
-					options: action.payload.map(option => ({ label: option.name, value: option.id })),
+					options: action.payload.map((option) => ({ label: option.name, value: option.id })),
 					loading: false,
 					success: true,
 				},

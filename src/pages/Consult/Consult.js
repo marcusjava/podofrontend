@@ -74,6 +74,7 @@ const Consult = () => {
 	const { id } = useParams();
 	const [item, setItem] = useState({});
 	const [loading, setLoading] = useState(false);
+	const [loadingPhotos, setLoadingPhotos] = useState(false);
 
 	const { options } = useSelector((state) => state.procedure.procedures);
 
@@ -93,31 +94,34 @@ const Consult = () => {
 		try {
 			const dialog = window.confirm('Tem certeza que deseja excluir a foto?');
 			if (dialog === true) {
-				setLoading(true);
+				setLoadingPhotos(true);
 				const response = await axios.delete(`/consults/${id}/photos/${photoId}`);
 				if (response.status === 200) {
 					setItem(response.data);
-					setLoading(false);
+					setLoadingPhotos(false);
 					toastr.success('Foto excluida com sucesso!');
 				}
 			}
 		} catch (error) {
 			toastr.error('Ocorreu um erro ao excluir a foto', error.response.data.message);
+			setLoadingPhotos(false);
 		}
 	};
 
 	const savePhoto = async (files) => {
 		try {
+			setLoadingPhotos(true);
 			const photoData = new FormData();
 			files.forEach((file) => photoData.append('photos', file));
 			const response = await axios.put(`/consults/${id}/photos`, photoData);
 			if (response.status === 200) {
 				setItem(response.data);
+				setLoadingPhotos(false);
 				formRef.current.clearField('files');
-				window.scrollTo(0, 0);
 			}
 		} catch (error) {
 			toastr.error('Ocorreu um erro ao salvar a foto', error.response.data.message);
+			setLoadingPhotos(false);
 		}
 	};
 
@@ -145,11 +149,14 @@ const Consult = () => {
 			if (dialog === true) {
 				setLoading(true);
 				const response = await axios.put(`/consults/${data._id}`, sendData);
-				savePhoto(data.files);
 
 				if (response.status === 200) {
 					setItem(response.data);
+					if (data.files.length > 0) {
+						savePhoto(data.files);
+					}
 					setLoading(false);
+					window.scrollTo(0, 0);
 					toastr.success('Consulta atualizada com sucesso');
 				}
 			}
@@ -166,6 +173,7 @@ const Consult = () => {
 			errorMessages[data.path] = data.message;
 			formRef.current.setErrors(errorMessages);
 			toastr.error('Ocorreu um erro ao salvar a consulta', data.message);
+			setLoading(false);
 		}
 	};
 
@@ -248,6 +256,8 @@ const Consult = () => {
 				<Col md={12}>
 					{item.photos.length === 0 ? (
 						<p className="text-center text-muted">Sem fotos</p>
+					) : loadingPhotos ? (
+						<Spinner />
 					) : (
 						<PhotoList photos={item.photos} handleDeletePhoto={handleDeletePhoto} />
 					)}

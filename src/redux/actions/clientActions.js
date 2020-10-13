@@ -1,13 +1,12 @@
 import {
 	FETCH_CLIENT_REQUEST,
 	FETCH_CLIENT_SUCCESS,
+	UPDATE_CLIENT_SUCCESS,
 	FETCH_CLIENT_ERROR,
 	FETCH_CLIENTS_REQUEST,
 	FETCH_CLIENTS_SUCCESS,
 	FETCH_CLIENTS_ERROR,
 } from '../types';
-
-import { toastr } from 'react-redux-toastr';
 
 import axios from 'axios';
 
@@ -18,12 +17,9 @@ export const saveClient = (data) => (dispatch) => {
 		.post('/clients/register', data)
 		.then((response) => {
 			dispatch({ type: FETCH_CLIENT_SUCCESS, payload: response.data });
-			toastr.success('Cliente salvo com sucesso');
-			dispatch(Clients());
 		})
 		.catch((error) => {
 			dispatch({ type: FETCH_CLIENT_ERROR, payload: error.response.data });
-			toastr.error(error.response.data.message);
 		});
 };
 
@@ -33,13 +29,10 @@ export const updateClient = (data, id) => (dispatch) => {
 	return axios
 		.put(`/clients/${id}`, data)
 		.then((response) => {
-			dispatch({ type: FETCH_CLIENT_SUCCESS, payload: response.data });
-			toastr.success('Cliente atualizado com sucesso');
-			dispatch(Clients());
+			dispatch({ type: UPDATE_CLIENT_SUCCESS, payload: response.data });
 		})
 		.catch((error) => {
 			dispatch({ type: FETCH_CLIENT_ERROR, payload: error.response.data });
-			toastr.error(error.response.data.message);
 		});
 };
 
@@ -53,7 +46,6 @@ export const getClient = (id) => (dispatch) => {
 		})
 		.catch((error) => {
 			dispatch({ type: FETCH_CLIENT_ERROR, payload: error.response.data });
-			toastr.error(error.response.data.message);
 		});
 };
 

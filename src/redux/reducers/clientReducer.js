@@ -1,6 +1,7 @@
 import {
 	FETCH_CLIENT_REQUEST,
 	FETCH_CLIENT_SUCCESS,
+	UPDATE_CLIENT_SUCCESS,
 	FETCH_CLIENT_ERROR,
 	FETCH_CLIENTS_REQUEST,
 	FETCH_CLIENTS_SUCCESS,
@@ -42,6 +43,27 @@ export default (state = initialState, action) => {
 					item: action.payload,
 					loading: false,
 					success: true,
+				},
+				clients: {
+					...state.clients,
+					items: [action.payload, ...state.clients.items],
+				},
+			};
+
+		case UPDATE_CLIENT_SUCCESS:
+			const index = state.clients.items.findIndex((item) => item._id === action.payload._id);
+			const newArray = [...state.clients.items];
+			newArray[index] = action.payload;
+			return {
+				...state,
+				client: {
+					...state.client,
+					loading: false,
+					success: true,
+				},
+				clients: {
+					...state.clients,
+					items: newArray,
 				},
 			};
 

@@ -39,7 +39,14 @@ const FileUpload = ({ name, ...rest }) => {
 
 	return (
 		<label id="thumbnail" style={{ backgroundImage: `url(${preview})` }} className={preview ? 'has-thumbnail' : ''}>
-			<input type="file" ref={inputRef} onChange={handlePreview} defaultValue={defaultValue} {...rest} />
+			<input
+				type="file"
+				ref={inputRef}
+				onChange={handlePreview}
+				defaultValue={defaultValue}
+				{...rest}
+				accept="image/png, image/jpeg"
+			/>
 			<img src={camera} alt="camera" />
 		</label>
 	);

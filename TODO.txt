@@ -11,3 +11,6 @@
 
 9 - Mudar nome das rotas por conta do breadcrumb OK
 11 - No cadastro de clientes incluir na tabela um botão para visualizar as consultas
+
+12 - Ao atualizar a consulta verificar a lista de consulta
+13 - botão cancelar não funciona

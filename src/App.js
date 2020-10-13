@@ -1,10 +1,9 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
-import 'react-circular-progressbar/dist/styles.css';
 import 'react-json-inspector/json-inspector.css';
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Switch, Route, HashRouter } from 'react-router-dom';
 import Login from './pages/Login';
 import DefaultLayout from './components/layout/DefaultLayout';
 import { Provider } from 'react-redux';
@@ -31,9 +30,12 @@ if (localStorage.getItem('token')) {
 	store.dispatch(setCurrentUser(decoded));
 }
 
-axios.defaults.baseURL = process.env.REACT_APP_DEV_API_URL;
+axios.defaults.baseURL =
+	process.env.NODE_ENV === 'development' ? 'http://localhost:3001/api' : 'https://podo-backend.herokuapp.com/api/';
+// process.env.REACT_APP_DEV_API_URL;
+// 'http://3.129.92.92:3001/api';
 //https://podo-backend.herokuapp.com/api/
-//|| ' http://localhost:3001/api'
+//|| 'http://localhost:3001/api'
 
 axios.interceptors.request.use(
 	(config) => {
@@ -70,7 +72,7 @@ axios.interceptors.response.use(
 function App() {
 	return (
 		<Provider store={store}>
-			<Router>
+			<HashRouter>
 				<div className="App">
 					<Messages />
 					<Switch>
@@ -79,7 +81,7 @@ function App() {
 						<Route path="/ficha/:id" component={FichaConsult} />
 					</Switch>
 				</div>
-			</Router>
+			</HashRouter>
 		</Provider>
 	);
 }

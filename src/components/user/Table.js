@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import { Tooltip, OverlayTrigger, Button } from 'react-bootstrap';
 import { PwdModal } from '../common/Form';
 import classnames from 'classnames';
 import { getUsers } from '../../redux/actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
+import Spinner from '../../components/common/Spinner';
+import { MdEdit } from 'react-icons/md';
 
 const Table = ({ rowSelect }) => {
-	const { items } = useSelector((state) => state.user.users);
+	const { items, loading } = useSelector((state) => state.user.users);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -28,7 +31,17 @@ const Table = ({ rowSelect }) => {
 	};
 
 	const editFormat = (cell, row) => {
-		return <PwdModal id={row.id} />;
+		return (
+			<div className="form-inline">
+				<PwdModal id={row.id} />;
+				<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit">Editar</Tooltip>}>
+					<Button onClick={() => rowSelect(row)} variant="link">
+						<MdEdit size={24} />
+						&nbsp;
+					</Button>
+				</OverlayTrigger>
+			</div>
+		);
 	};
 
 	const pictureFormat = (cell, row) => {
@@ -37,12 +50,6 @@ const Table = ({ rowSelect }) => {
 				<img src={cell} alt="Perfil" style={{ width: '50px', height: '50px', borderRadius: 50 }} />
 			</a>
 		);
-	};
-
-	const selectRowProp = {
-		mode: 'radio',
-		clickToSelect: false,
-		onSelect: (row, isSelected, e) => rowSelect(row),
 	};
 
 	const handleNameChange = (e) => {
@@ -70,13 +77,14 @@ const Table = ({ rowSelect }) => {
 			dispatch(getUsers());
 		}
 	};
-	return (
+	return loading ? (
+		<Spinner />
+	) : (
 		<BootstrapTable
 			data={items}
 			striped
 			hover
 			version="4"
-			selectRow={selectRowProp}
 			pagination
 			options={{ noDataText: 'Não há itens a exibir' }}
 		>

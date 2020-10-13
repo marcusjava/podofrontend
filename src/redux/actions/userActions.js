@@ -2,9 +2,11 @@ import {
 	SET_USER,
 	FETCH_USER_REQUEST,
 	FETCH_USER_SUCCESS,
+	UPDATE_USER_SUCCESS,
 	FETCH_USER_ERROR,
 	FETCH_USERS_REQUEST,
 	FETCH_USERS_SUCCESS,
+	FETCH_USERS_ERROR,
 	LOADING_USER,
 } from '../types';
 
@@ -43,27 +45,12 @@ export const logout = (history) => (dispatch) => {
 
 export const register = (data) => (dispatch) => {
 	dispatch({ type: FETCH_USER_REQUEST });
-	const sendData = new FormData();
-	sendData.append('thumbnail', data.thumbnail || null);
-	sendData.append('name', data.name);
-	sendData.append('phone', data.phone);
-	sendData.append('nasc', data.nasc);
-	sendData.append('cpf', data.cpf);
-	sendData.append('rg', data.rg);
-	sendData.append('email', data.email);
-	sendData.append('address', JSON.stringify(data.address));
-	sendData.append('password', data.password);
-	sendData.append('password2', data.password2);
-	sendData.append('role', JSON.stringify(data.role));
-	sendData.append('status', JSON.stringify(data.status));
+
 	return axios
-		.post('/users/register', sendData)
+		.post('/users/register', data)
 		.then((response) => {
-			console.log(response);
 			if (response.status === 201) {
-				dispatch({ type: FETCH_USER_SUCCESS, payload: {} });
-				toastr.success('Usuario criado com sucesso');
-				dispatch(getUsers());
+				dispatch({ type: FETCH_USER_SUCCESS, payload: response.data });
 			}
 		})
 		.catch((error) => {
@@ -71,28 +58,16 @@ export const register = (data) => (dispatch) => {
 		});
 };
 
-export const updateUser = (data) => (dispatch) => {
+export const updateUser = (data, id) => (dispatch) => {
 	dispatch({ type: FETCH_USER_REQUEST });
-	const sendData = new FormData();
-	sendData.append('thumbnail', data.thumbnail);
-	sendData.append('name', data.name);
-	sendData.append('phone', data.phone);
-	sendData.append('nasc', data.nasc);
-	sendData.append('cpf', data.cpf);
-	sendData.append('rg', data.rg);
-	sendData.append('email', data.email);
-	sendData.append('address', JSON.stringify(data.address));
-	sendData.append('role', JSON.stringify(data.role));
-	sendData.append('status', JSON.stringify(data.status));
 
 	return axios
-		.put(`/users/${data.id}`, sendData)
+		.put(`/users/${id}`, data)
 		.then((response) => {
-			dispatch({ type: FETCH_USER_SUCCESS, payload: response.data });
-			toastr.success('Usuario atualizado com sucesso');
-			dispatch(getUsers());
+			dispatch({ type: UPDATE_USER_SUCCESS, payload: response.data });
 		})
 		.catch((error) => {
+			console.log(error);
 			dispatch({ type: FETCH_USER_ERROR, payload: error.response.data });
 		});
 };
@@ -104,7 +79,7 @@ export const getUsers = () => (dispatch) => {
 		.then((response) => {
 			dispatch({ type: FETCH_USERS_SUCCESS, payload: response.data });
 		})
-		.catch((error) => console.log(error));
+		.catch((error) => dispatch({ type: FETCH_USERS_ERROR, payload: error.response.data }));
 };
 
 export const change_pwd = (data, id) => (dispatch) => {
@@ -115,7 +90,6 @@ export const change_pwd = (data, id) => (dispatch) => {
 			console.log(response.data);
 			if (response.status === 200) {
 				dispatch({ type: FETCH_USER_SUCCESS, payload: {} });
-				toastr.success('Senha atualizada com sucesso');
 			}
 		})
 		.catch((error) => {

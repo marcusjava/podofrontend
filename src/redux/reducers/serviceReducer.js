@@ -1,6 +1,7 @@
 import {
 	FETCH_SERVICE_REQUEST,
 	FETCH_SERVICE_SUCCESS,
+	UPDATE_SERVICE_SUCCESS,
 	FETCH_SERVICE_ERROR,
 	FETCH_SERVICES_REQUEST,
 	FETCH_SERVICES_SUCCESS,
@@ -37,9 +38,31 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				service: {
+					...state.service,
 					item: action.payload,
 					loading: false,
 					success: true,
+				},
+				services: {
+					...state.services,
+					items: [action.payload, ...state.services.items],
+				},
+			};
+
+		case UPDATE_SERVICE_SUCCESS:
+			const index = state.services.items.findIndex((item) => item._id === action.payload._id);
+			const newArray = [...state.services.items];
+			newArray[index] = action.payload;
+			return {
+				...state,
+				service: {
+					...state.service,
+					loading: false,
+					success: true,
+				},
+				services: {
+					...state.services,
+					items: newArray,
 				},
 			};
 
@@ -66,7 +89,7 @@ export default (state = initialState, action) => {
 				...state,
 				services: {
 					items: action.payload,
-					options: action.payload.map(option => ({ label: option.description, value: option._id })),
+					options: action.payload.map((option) => ({ label: option.description, value: option._id })),
 					loading: false,
 					success: true,
 				},

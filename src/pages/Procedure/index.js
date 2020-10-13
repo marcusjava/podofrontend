@@ -6,24 +6,28 @@ import { Input, TextArea, Select } from '../../components/common/Form';
 import Table from './Table';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveProcedure, updateProcedure } from '../../redux/actions/procedureActions';
-import { Services } from '../../redux/actions/serviceActions';
+import { getServices } from '../../redux/actions/serviceActions';
+import Loading from '../../components/common/Loading';
+import { toastr } from 'react-redux-toastr';
 
 const Procedure = () => {
 	const [editMod, setEditMod] = useState(false);
 
-	const procedure = useSelector((state) => state.procedure.procedure);
+	const { success, error, loading } = useSelector((state) => state.procedure.procedure);
 	const services = useSelector((state) => state.service.services);
 	const dispatch = useDispatch();
 
 	const formRef = useRef(null);
 
 	useEffect(() => {
-		dispatch(Services());
+		dispatch(getServices());
 	}, [dispatch]);
 
 	const rowSelect = (row) => {
+		console.log(row);
 		setEditMod(true);
 		formRef.current.setData({
+			_id: row._id,
 			service: { value: row.service._id, label: row.service.description },
 			name: row.name,
 			description: row.description,
@@ -31,17 +35,20 @@ const Procedure = () => {
 	};
 
 	useEffect(() => {
-		if (procedure.success === true) {
+		if (success === true) {
+			toastr.success('Procedimento salvo com sucesso!');
 			setEditMod(false);
 			formRef.current.setErrors({});
 			formRef.current.reset();
 		}
-		if (procedure.error) {
+		if (error !== undefined && Object.keys(error).length > 0) {
 			const errorMessages = {};
-			errorMessages[procedure.error.path] = procedure.error.message;
+			errorMessages[error.path] = error.message;
+
 			formRef.current.setErrors(errorMessages);
+			toastr.error('Ocorreu um erro ao salvar o procedimento');
 		}
-	}, [procedure.success, procedure.error]);
+	}, [success, error]);
 
 	const handleSubmit = async (data) => {
 		try {
@@ -69,12 +76,18 @@ const Procedure = () => {
 
 	return (
 		<>
+			<Loading show={loading} />
 			<Row>
 				<Col m4={4}>
 					<p className="title text-center">Cadastro Procedimentos</p>
 				</Col>
 			</Row>
 			<Form ref={formRef} onSubmit={handleSubmit}>
+				<Row>
+					<Col md={6}>
+						<Input name="_id" hidden />
+					</Col>
+				</Row>
 				<Row className="mt-4">
 					<Col md={3}>
 						<Select name="service" label="Serviço" options={services.options} />

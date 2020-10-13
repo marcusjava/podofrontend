@@ -11,7 +11,6 @@ import { FaHome, FaTools, FaNewspaper, FaKey, FaUsers, FaBriefcaseMedical, FaUse
 import { GiMorgueFeet, GiWreckingBall } from 'react-icons/gi';
 import { FiLogOut, FiAlertTriangle } from 'react-icons/fi';
 import InputFilter from '../../../pages/Client/InputFilter';
-import PwdChange from '../../user/PwdChange';
 
 const NavBar = () => {
 	const { credentials } = useSelector((state) => state.user.user);

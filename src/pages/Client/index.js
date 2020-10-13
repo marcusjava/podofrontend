@@ -4,24 +4,25 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveClient, updateClient, Clients } from '../../redux/actions/clientActions';
 import { withRouter } from 'react-router-dom';
 import { Form } from '@unform/web';
-import { FileUpload, Input, Select } from '../../components/common/Form';
+import { FileUpload, Input, Select, InputMask } from '../../components/common/Form';
 import Spinner from '../../components/common/Spinner';
 import * as Yup from 'yup';
 import Table from './Table';
 import axios from 'axios';
-import { DatePicker } from '../../components/common/Form';
-import { parseISO } from 'date-fns';
+import ImageResize from '../../utils/ImageResize';
+import Loading from '../../components/common/Loading';
+import { toastr } from 'react-redux-toastr';
 
 const Client = () => {
 	const [editMod, setEditMode] = useState(false);
 
-	const client = useSelector((state) => state.client.client);
-	const { items, loading } = useSelector((state) => state.client.clients);
+	const { loading: clientLoading, error, success } = useSelector((state) => state.client.client);
+
+	const { items, loading: clientsLoading } = useSelector((state) => state.client.clients);
 
 	const [uf, setUF] = useState([]);
 	const [selectedUF, setSelectedUF] = useState('');
 	const [city, setCity] = useState([]);
-	const [selectedCity, setSelectedCity] = useState('');
 
 	const dispatch = useDispatch();
 
@@ -47,20 +48,22 @@ const Client = () => {
 	}, [selectedUF]);
 
 	useEffect(() => {
-		if (client.success === true) {
+		if (success === true) {
 			setEditMode(false);
+			toastr.success('Cliente salvo com sucesso');
 			formRef.current.setErrors({});
 			formRef.current.reset();
 		}
-		if (client.error) {
+		if (Object.keys(error).length > 0) {
 			const errorMessages = {};
-			errorMessages[client.error.path] = client.error.message;
+			errorMessages[error.path] = error.message;
 			formRef.current.setErrors(errorMessages);
 		}
-	}, [client.success, client.error]);
+	}, [success, error]);
 
 	const rowSelect = (row) => {
-		console.log(row);
+		formRef.current.setErrors({});
+		formRef.current.reset();
 		setEditMode(true);
 		formRef.current.setFieldValue('id', row._id);
 		formRef.current.setFieldValue('name', row.name);
@@ -97,12 +100,15 @@ const Client = () => {
 					.required('Informe ao menos um contato'),
 
 				nasc: Yup.string()
-					.matches(/^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{2}$/i, 'Formato incorreto')
+					.matches(/^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/i, 'Formato incorreto')
 					.required('Informe a data de nascimento'),
 			});
+
+			const imageResized = await ImageResize(data.thumbnail);
+
 			await schema.validate(data, { abortEarly: false });
 			const sendData = new FormData();
-			sendData.append('thumbnail', data.thumbnail || null);
+			sendData.append('thumbnail', imageResized || null);
 			sendData.append('name', data.name);
 			sendData.append('instagram', data.instagram);
 			sendData.append('cpf', data.cpf);
@@ -118,7 +124,6 @@ const Client = () => {
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
-				console.log(error.inner, data);
 				error.inner.forEach((erro) => {
 					errorMessages[erro.path] = erro.message;
 					formRef.current.setErrors(errorMessages);
@@ -129,6 +134,7 @@ const Client = () => {
 
 	return (
 		<Fragment>
+			<Loading show={clientLoading} />
 			<Row>
 				<Col m4={4}>
 					<p className="title text-center">Cadastro Clientes</p>
@@ -158,27 +164,15 @@ const Client = () => {
 						<Input name="instagram" label="Instagram" maxLength={50} />
 					</Col>
 					<Col md={3}>
-						<Input
-							name="cpf"
-							label="CPF"
-							style={{ width: '60%' }}
-							placeholder="XXXXXXXXXXX"
-							maxLength={11}
-						/>
+						<InputMask name="cpf" label="CPF" style={{ width: '40%' }} mask="99999999999" />
 					</Col>
 					<Col md={3}>
-						<Input
-							name="contact"
-							label="Telefone"
-							style={{ width: '60%' }}
-							placeholder="XX XXXXX-XXXX"
-							maxLength={13}
-						/>
+						<InputMask mask="99 99999-9999" style={{ width: '40%' }} name="contact" label="Telefone" />
 					</Col>
 				</Row>
 				<Row>
 					<Col md={2}>
-						<Input name="nasc" label="Nasc" maxLength={8} style={{ width: '40%' }} placeholder="DD/MM/AA" />
+						<InputMask mask="99/99/9999" style={{ width: '60%' }} name="nasc" label="Nascimento" />
 					</Col>
 				</Row>
 				<Row>
@@ -242,7 +236,7 @@ const Client = () => {
 
 				<Row>
 					<Col md={12} className="text-right">
-						<Button type="submit" variant="primary">
+						<Button type="submit" variant="primary" disabled={clientLoading}>
 							{editMod ? 'Atualizar' : 'Salvar'}
 						</Button>
 						<Button variant="danger" onClick={() => window.location.reload()}>
@@ -253,7 +247,7 @@ const Client = () => {
 			</Form>
 			<Row>
 				<Col md={12} className="my-4">
-					{loading ? <Spinner width={50} /> : <Table rowSelect={rowSelect} data={items} />}
+					{clientsLoading ? <Spinner /> : <Table rowSelect={rowSelect} data={items} />}
 				</Col>
 			</Row>
 		</Fragment>

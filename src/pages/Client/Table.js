@@ -51,14 +51,6 @@ const Table = ({ rowSelect, data }) => {
 			dispatch(Clients());
 		}
 	};
-	const handleEmailChange = (e) => {
-		const { value } = e.target;
-		if (value) {
-			dispatch(Clients({ email: value }));
-		} else {
-			dispatch(Clients());
-		}
-	};
 
 	const handleCpfChange = (e) => {
 		const { value } = e.target;
@@ -93,16 +85,12 @@ const Table = ({ rowSelect, data }) => {
 			<TableHeaderColumn dataField="avatar_url" dataFormat={pictureFormat} width="90">
 				Foto
 			</TableHeaderColumn>
-			<TableHeaderColumn dataField="name">
+			<TableHeaderColumn dataField="name" width="280">
 				Nome
 				<br />
-				<input type="text" style={{ width: '120px' }} onChange={handleNameChange} />
+				<input type="text" style={{ width: '200px' }} onChange={handleNameChange} />
 			</TableHeaderColumn>
-			<TableHeaderColumn dataField="email">
-				Email
-				<br />
-				<input type="text" style={{ width: '120px' }} onChange={handleEmailChange} />
-			</TableHeaderColumn>
+
 			<TableHeaderColumn dataField="instagram" dataFormat={instaFormat}>
 				Instagram
 			</TableHeaderColumn>

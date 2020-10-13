@@ -8,6 +8,7 @@ import {
 	LOADING_USER,
 	FETCH_USER_SUCCESS,
 	FETCH_USER_REQUEST,
+	UPDATE_USER_SUCCESS,
 	FETCH_USER_ERROR,
 } from '../types';
 
@@ -46,7 +47,6 @@ export default (state = initialState, action) => {
 				user: {
 					...state.user,
 					loading: false,
-					success: true,
 					credentials: action.payload,
 					authenticated: !isEmpty(action.payload),
 				},
@@ -66,9 +66,31 @@ export default (state = initialState, action) => {
 				...state,
 				user: {
 					...state.user,
-					item: action.payload,
+
 					loading: false,
 					success: true,
+				},
+				users: {
+					...state.users,
+					items: [action.payload, ...state.users.items],
+				},
+			};
+
+		case UPDATE_USER_SUCCESS:
+			console.log(action.payload);
+			const index = state.users.items.findIndex((item) => item._id === action.payload._id);
+			const newArray = [...state.users.items];
+			newArray[index] = action.payload;
+			return {
+				...state,
+				user: {
+					...state.user,
+					loading: false,
+					success: true,
+				},
+				users: {
+					...state.users,
+					items: newArray,
 				},
 			};
 

@@ -3,103 +3,67 @@ import { Row, Col, Button } from 'react-bootstrap';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { Input, TextArea } from '../../components/common/Form';
+import { useSelector, useDispatch } from 'react-redux';
+import { saveService, updateService } from '../../redux/actions/serviceActions';
 import { toastr } from 'react-redux-toastr';
+import Loading from '../../components/common/Loading';
 import Table from './Table';
-import axios from 'axios';
 
 const Service = () => {
 	const [editMod, setEditMod] = useState(false);
-	const [services, setServices] = useState([]);
+
+	const dispatch = useDispatch();
+
+	const { error, success, loading } = useSelector((state) => state.service.service);
 
 	const formRef = useRef(null);
 
-	async function loadServices() {
-		const result = await axios.get('/services');
-		setServices(result.data);
-	}
-
 	useEffect(() => {
-		loadServices();
-	}, []);
-
-	const saveData = async (data) => {
-		try {
-			const schema = Yup.object().shape({
-				description: Yup.string().required('Descrição obrigatoria'),
-			});
-			await schema.validate(data, { abortEarly: false });
-			axios
-				.post('/services', data)
-				.then((response) => {
-					toastr.success('Serviço criado com sucesso');
-					formRef.current.reset();
-					setEditMod(false);
-					formRef.current.setErrors({});
-					loadServices();
-				})
-				.catch((error) => {
-					const errorMessages = {};
-					const { path, message } = error.response.data;
-					errorMessages[path] = message;
-					formRef.current.setErrors(errorMessages);
-					toastr.error(message);
-				});
-		} catch (error) {
-			if (error instanceof Yup.ValidationError) {
-				const errorMessages = {};
-				error.inner.forEach((erro) => {
-					errorMessages[erro.path] = erro.message;
-					formRef.current.setErrors(errorMessages);
-				});
-			}
+		if (success === true) {
+			toastr.success('Serviço salvo com sucesso!');
+			setEditMod(false);
+			formRef.current.setErrors({});
+			formRef.current.reset();
 		}
-	};
+		if (error !== undefined && Object.keys(error).length > 0) {
+			const errorMessages = {};
+			errorMessages[error.path] = error.message;
 
-	const updateData = async (data) => {
-		try {
-			const schema = Yup.object().shape({
-				description: Yup.string().required('Descrição obrigatoria'),
-			});
-			await schema.validate(data, { abortEarly: false });
-			axios
-				.put(`/services/${data._id}`, data)
-				.then((response) => {
-					toastr.success('Serviço criado com sucesso');
-					formRef.current.reset();
-					setEditMod(false);
-					loadServices();
-					formRef.current.setErrors({});
-				})
-				.catch((error) => {
-					const { data } = error.response;
-					console.log(data);
-				});
-		} catch (error) {
-			if (error instanceof Yup.ValidationError) {
-				const errorMessages = {};
-				error.inner.forEach((erro) => {
-					errorMessages[erro.path] = erro.message;
-					formRef.current.setErrors(errorMessages);
-				});
-			}
+			formRef.current.setErrors(errorMessages);
+			toastr.error('Ocorreu um erro ao salvar o serviço');
 		}
-	};
+	}, [success, error]);
 
-	const handleSubmit = (data) => {
-		if (editMod) {
-			updateData(data);
-		} else {
-			saveData(data);
-		}
-	};
-
-	const rowSelect = (row, isSelected) => {
+	const rowSelect = (row) => {
 		setEditMod(true);
-		formRef.current.setData(row);
+		formRef.current.setData({
+			_id: row._id,
+			description: row.description,
+			observations: row.observations,
+		});
+	};
+
+	const handleSubmit = async (data) => {
+		try {
+			const schema = Yup.object().shape({
+				description: Yup.string().required('Descrição obrigatoria'),
+			});
+			await schema.validate(data, { abortEarly: false });
+			editMod ? dispatch(updateService(data, data._id)) : dispatch(saveService(data));
+		} catch (error) {
+			if (error instanceof Yup.ValidationError) {
+				const errorMessages = {};
+				error.inner.forEach((erro) => {
+					errorMessages[erro.path] = erro.message;
+					formRef.current.setErrors(errorMessages);
+				});
+			}
+		}
 	};
 
 	return (
 		<>
+			<Loading show={loading} />
 			<Row clas="justify-content-center">
 				<Col md={12} className="text-center">
 					<p className="title">Cadastro Serviços</p>
@@ -126,7 +90,7 @@ const Service = () => {
 			</Form>
 			<Row className="my-4">
 				<Col md={12}>
-					<Table data={services} rowSelect={rowSelect} />
+					<Table rowSelect={rowSelect} />
 				</Col>
 			</Row>
 		</>
