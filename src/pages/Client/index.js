@@ -7,7 +7,7 @@ import { Form } from '@unform/web';
 import { FileUpload, Input, Select, InputMask } from '../../components/common/Form';
 import Spinner from '../../components/common/Spinner';
 import * as Yup from 'yup';
-import Table from './Table';
+import Table from '../../components/client/Table';
 import axios from 'axios';
 import ImageResize from '../../utils/ImageResize';
 import Loading from '../../components/common/Loading';
@@ -35,6 +35,9 @@ const Client = () => {
 		}
 		dispatch(Clients());
 		getUF();
+		return () => {
+			dispatch({ type: 'CLEAR_CLIENT_STATE' });
+		};
 	}, [dispatch]);
 
 	useEffect(() => {

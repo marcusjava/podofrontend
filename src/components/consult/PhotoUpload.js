@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
-import { FileUpload, Input, Modal, Tooltip, OverlayTrigger } from '../../components/common/Form';
+import { FileUpload, Input, Modal, Tooltip, OverlayTrigger } from '../common/Form';
 import { MdAddAPhoto } from 'react-icons/md';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';

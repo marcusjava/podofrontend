@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveService, updateService } from '../../redux/actions/serviceActions';
 import { toastr } from 'react-redux-toastr';
 import Loading from '../../components/common/Loading';
-import Table from './Table';
+import Table from '../../components/service/Table';
 
 const Service = () => {
 	const [editMod, setEditMod] = useState(false);
@@ -17,6 +17,12 @@ const Service = () => {
 	const { error, success, loading } = useSelector((state) => state.service.service);
 
 	const formRef = useRef(null);
+
+	useEffect(() => {
+		return () => {
+			dispatch({ type: 'CLEAR_SERVICE_STATE' });
+		};
+	}, []);
 
 	useEffect(() => {
 		if (success === true) {

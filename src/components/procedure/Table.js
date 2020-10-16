@@ -2,18 +2,23 @@ import React, { useEffect } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Tooltip, OverlayTrigger, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getServices } from '../../redux/actions/serviceActions';
-import Spinner from '../../components/common/Spinner';
+import { Procedures } from '../../redux/actions/procedureActions';
+import Spinner from '../common/Spinner';
 import { MdEdit } from 'react-icons/md';
+import './styles.css';
 
 const Table = ({ rowSelect }) => {
+	const { items, loading } = useSelector((state) => state.procedure.procedures);
+
 	const dispatch = useDispatch();
 
-	const { items, loading } = useSelector((state) => state.service.services);
-
 	useEffect(() => {
-		dispatch(getServices());
+		dispatch(Procedures());
 	}, [dispatch]);
+
+	const formatService = (cell, row) => {
+		return cell.description;
+	};
 
 	const actionFormat = (cell, row) => {
 		return (
@@ -42,15 +47,19 @@ const Table = ({ rowSelect }) => {
 			<TableHeaderColumn isKey dataField="_id" hidden>
 				Id
 			</TableHeaderColumn>
+			<TableHeaderColumn dataField="name" filter={{ type: 'TextFilter', delay: 1000 }} dataSort={true}>
+				Procedimento
+			</TableHeaderColumn>
 			<TableHeaderColumn
-				dataField="description"
+				dataField="service"
 				filter={{ type: 'TextFilter', delay: 1000 }}
 				dataSort={true}
-				width="500px"
+				dataFormat={formatService}
+				width={'180px'}
 			>
-				Descrição
+				Serviço
 			</TableHeaderColumn>
-			<TableHeaderColumn dataField="observations">Observações</TableHeaderColumn>
+			<TableHeaderColumn dataField="description">Descrição</TableHeaderColumn>
 			<TableHeaderColumn width="90" dataFormat={actionFormat}>
 				Ações
 			</TableHeaderColumn>

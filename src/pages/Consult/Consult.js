@@ -205,10 +205,10 @@ const Consult = () => {
 					<p className="title text-center">{item.client && item.client.name}</p>
 				</Col>
 			</Row>
-			<Row>
-				<Col className="text-right d-flex flex-column">
+			<Row className="d-flex flex-row-reverse">
+				<Col md={1} className="text-center d-flex flex-column ">
 					{item.status.value === '1' && (
-						<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit">Imprimir Ficha</Tooltip>}>
+						<OverlayTrigger placement="top" overlay={<Tooltip id="edit">Imprimir Ficha</Tooltip>}>
 							<Link to={`/ficha/${item.id}`}>
 								<FaPrint size={30} />
 							</Link>

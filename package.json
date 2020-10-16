@@ -33,6 +33,8 @@
     "react-router-dynamic-breadcrumbs": "^2.2.0",
     "react-scripts": "3.4.0",
     "react-select": "3.0.3",
+    "react-to-pdf": "^0.0.13",
+    "react-to-print": "^2.10.0",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-multi": "^0.1.12",

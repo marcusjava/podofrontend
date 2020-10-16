@@ -2,6 +2,7 @@ import {
 	FETCH_CLIENT_REQUEST,
 	FETCH_CLIENT_SUCCESS,
 	UPDATE_CLIENT_SUCCESS,
+	CLEAR_CLIENT_STATE,
 	FETCH_CLIENT_ERROR,
 	FETCH_CLIENTS_REQUEST,
 	FETCH_CLIENTS_SUCCESS,
@@ -26,6 +27,16 @@ const initialState = {
 
 export default (state = initialState, action) => {
 	switch (action.type) {
+		case CLEAR_CLIENT_STATE:
+			return {
+				...state,
+				client: {
+					loading: false,
+					success: false,
+					error: {},
+					item: {},
+				},
+			};
 		case FETCH_CLIENT_REQUEST:
 			return {
 				...state,

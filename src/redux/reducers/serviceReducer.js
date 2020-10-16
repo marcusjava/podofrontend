@@ -2,6 +2,7 @@ import {
 	FETCH_SERVICE_REQUEST,
 	FETCH_SERVICE_SUCCESS,
 	UPDATE_SERVICE_SUCCESS,
+	CLEAR_SERVICE_STATE,
 	FETCH_SERVICE_ERROR,
 	FETCH_SERVICES_REQUEST,
 	FETCH_SERVICES_SUCCESS,
@@ -26,6 +27,16 @@ const initialState = {
 
 export default (state = initialState, action) => {
 	switch (action.type) {
+		case CLEAR_SERVICE_STATE:
+			return {
+				...state,
+				service: {
+					loading: false,
+					success: false,
+					error: {},
+					item: {},
+				},
+			};
 		case FETCH_SERVICE_REQUEST:
 			return {
 				...state,

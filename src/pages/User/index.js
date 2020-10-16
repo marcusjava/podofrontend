@@ -22,6 +22,12 @@ const User = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		return () => {
+			dispatch({ type: 'CLEAR_USER_STATE' });
+		};
+	}, []);
+
+	useEffect(() => {
 		if (success === true) {
 			setEditMode(false);
 			toastr.success('Usuario salvo com sucesso');

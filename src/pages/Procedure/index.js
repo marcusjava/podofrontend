@@ -3,7 +3,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { Input, TextArea, Select } from '../../components/common/Form';
-import Table from './Table';
+import Table from '../../components/procedure/Table';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveProcedure, updateProcedure } from '../../redux/actions/procedureActions';
 import { getServices } from '../../redux/actions/serviceActions';
@@ -21,10 +21,12 @@ const Procedure = () => {
 
 	useEffect(() => {
 		dispatch(getServices());
+		return () => {
+			dispatch({ type: 'CLEAR_PROCEDURE_STATE' });
+		};
 	}, [dispatch]);
 
 	const rowSelect = (row) => {
-		console.log(row);
 		setEditMod(true);
 		formRef.current.setData({
 			_id: row._id,

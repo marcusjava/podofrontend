@@ -8,10 +8,10 @@ import { FaBriefcaseMedical, FaPrint } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
-import EditConsult from './EditConsult';
+import EditConsult from '../../pages/Consult/EditConsult';
 import br from 'date-fns/locale/pt-BR';
 import { toastr } from 'react-redux-toastr';
-import Spinner from '../../components/common/Spinner';
+import Spinner from '../common/Spinner';
 import './styles.css';
 
 registerLocale('pt-br', br);

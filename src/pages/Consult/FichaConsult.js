@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import axios from 'axios';
 import Spinner from '../../components/common/Spinner';
 import Logo2 from '../../images/Logo2.jpg';
+
 import './styles.css';
 
 const FichaConsult = () => {
@@ -80,8 +81,8 @@ const FichaConsult = () => {
 						<Form.Group controlId="exampleForm.ControlTextarea1">
 							<Form.Label>Descrição</Form.Label>
 							<Form.Control
+								className="textareaSmall"
 								size="sm"
-								style={{ fontSize: 12 }}
 								as="textarea"
 								rows="6"
 								disabled
@@ -216,6 +217,7 @@ const FichaConsult = () => {
 							<Form.Control
 								size="sm"
 								style={{ fontSize: 12 }}
+								className="textareaSmall"
 								as="textarea"
 								rows="3"
 								disabled
@@ -476,6 +478,7 @@ const FichaConsult = () => {
 							<Form.Control
 								size="sm"
 								as="textarea"
+								className="textareaSmall"
 								style={{ fontSize: 12 }}
 								rows="3"
 								disabled
@@ -603,6 +606,7 @@ const FichaConsult = () => {
 									<Form.Label>Outras lesões pele</Form.Label>
 									<Form.Control
 										as="textarea"
+										className="textareaSmall"
 										style={{ fontSize: 12 }}
 										size="sm"
 										rows="3"
@@ -714,6 +718,7 @@ const FichaConsult = () => {
 									<Form.Label>Outras lesões ortopedicas</Form.Label>
 									<Form.Control
 										size="sm"
+										className="textareaSmall"
 										style={{ fontSize: 12 }}
 										as="textarea"
 										rows="3"
@@ -743,7 +748,7 @@ const FichaConsult = () => {
 						</Col>
 					) : (
 						item.photos.map((photo) => (
-							<Col md={6} className="mt-2" key={photo._id}>
+							<Col md={6} className="mt-2 list-inline" key={photo._id}>
 								<Image src={photo.url} style={{ width: '300px', height: '150px' }} />
 							</Col>
 						))

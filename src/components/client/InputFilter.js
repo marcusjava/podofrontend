@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Clients } from '../../redux/actions/clientActions';
 import { Row, Col, Form } from 'react-bootstrap';
@@ -10,6 +10,12 @@ const InputFilter = () => {
 	const [value, setValue] = useState('');
 
 	const history = useHistory();
+
+	useEffect(() => {
+		return () => {
+			console.log('saindo do componente input filter');
+		};
+	}, []);
 
 	const searchFilter = (e) => {
 		const text = e.target.value;

@@ -33,7 +33,7 @@ const Table = ({ rowSelect }) => {
 	const editFormat = (cell, row) => {
 		return (
 			<div className="form-inline">
-				<PwdModal id={row.id} />;
+				<PwdModal id={row.id} />
 				<OverlayTrigger placement="bottom" overlay={<Tooltip id="edit">Editar</Tooltip>}>
 					<Button onClick={() => rowSelect(row)} variant="link">
 						<MdEdit size={24} />

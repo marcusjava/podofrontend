@@ -24,11 +24,19 @@
 	border-radius: 5px;
 	background: white;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-	font-size: 12px;
+	font-size: 8px;
 }
 
 .font-small {
 	font-size: 10;
+}
+
+.textareaSmall {
+	font-size: 8px !important;
+}
+
+input[type='checkbox'] {
+	transform: scale(0.5);
 }
 
 @page {

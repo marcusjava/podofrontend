@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Col, Row, Container, Button } from 'react-bootstrap';
-import Table from '../Consult/Table';
+import Table from '../../components/consult/Table';
 import AddConsult from '../Consult/AddConsult';
 import { BsPersonFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';

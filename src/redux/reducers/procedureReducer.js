@@ -2,6 +2,7 @@ import {
 	FETCH_PROCEDURE_REQUEST,
 	FETCH_PROCEDURE_SUCCESS,
 	UPDATE_PROCEDURE_SUCCESS,
+	CLEAR_PROCEDURE_STATE,
 	FETCH_PROCEDURE_ERROR,
 	FETCH_PROCEDURES_REQUEST,
 	FETCH_PROCEDURES_SUCCESS,
@@ -26,6 +27,16 @@ const initialState = {
 
 export default (state = initialState, action) => {
 	switch (action.type) {
+		case CLEAR_PROCEDURE_STATE:
+			return {
+				...state,
+				procedure: {
+					loading: false,
+					success: false,
+					error: {},
+					item: {},
+				},
+			};
 		case FETCH_PROCEDURE_REQUEST:
 			return {
 				...state,

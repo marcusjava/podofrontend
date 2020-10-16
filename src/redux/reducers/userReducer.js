@@ -2,6 +2,7 @@ import {
 	SET_USER,
 	FETCH_USERS_REQUEST,
 	FETCH_USERS_SUCCESS,
+	CLEAR_USER_STATE,
 	FETCH_USERS_ERROR,
 	SET_AUTHENTICATED,
 	SET_UNAUTHENTICATED,
@@ -33,6 +34,16 @@ const initialState = {
 
 export default (state = initialState, action) => {
 	switch (action.type) {
+		case CLEAR_USER_STATE:
+			return {
+				...state,
+				user: {
+					...state.user,
+					loading: false,
+					success: false,
+					error: {},
+				},
+			};
 		case SET_AUTHENTICATED:
 			return {
 				...state,

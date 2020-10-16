@@ -3,7 +3,7 @@ import { Row, Col, Image } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import './styles.css';
-import Table from '../Consult/Table';
+import Table from '../../components/consult/Table';
 import Spinner from '../../components/common/Spinner';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';

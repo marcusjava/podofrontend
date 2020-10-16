@@ -10,7 +10,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { FaHome, FaTools, FaNewspaper, FaKey, FaUsers, FaBriefcaseMedical, FaUserShield } from 'react-icons/fa';
 import { GiMorgueFeet, GiWreckingBall } from 'react-icons/gi';
 import { FiLogOut, FiAlertTriangle } from 'react-icons/fi';
-import InputFilter from '../../../pages/Client/InputFilter';
+import InputFilter from '../../client/InputFilter';
 
 const NavBar = () => {
 	const { credentials } = useSelector((state) => state.user.user);
