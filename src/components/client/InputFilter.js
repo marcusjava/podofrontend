@@ -11,12 +11,6 @@ const InputFilter = () => {
 
 	const history = useHistory();
 
-	useEffect(() => {
-		return () => {
-			console.log('saindo do componente input filter');
-		};
-	}, []);
-
 	const searchFilter = (e) => {
 		const text = e.target.value;
 		if (text.length >= 3) {
@@ -31,12 +25,16 @@ const InputFilter = () => {
 
 	const listItems = value.length >= 3 && (
 		<ul
-			className="list-unstyled bg-white"
-			style={{ position: 'absolute', top: '30px', right: '25px', width: '240px' }}
+			className="list-unstyled bg-white border-primary"
+			style={{ position: 'absolute', top: '30px', right: '25px', width: '300px' }}
 		>
 			{items.length > 0 &&
 				items.map((item, index) => (
-					<li className="media p-2 rounded" key={item._id}>
+					<li
+						className="media p-2 rounded"
+						style={{ backgroundColor: '#DEEBFF', borderRadius: '20' }}
+						key={item._id}
+					>
 						<img
 							className="mr-1"
 							src={item.avatar_url}

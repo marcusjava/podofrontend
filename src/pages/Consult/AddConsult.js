@@ -121,7 +121,7 @@ function AddConsult() {
 						</Row>
 
 						<Row>
-							<Col md={6}>
+							<Col md={9}>
 								<Select label="Procedimentos" isMulti name="procedures" options={procedures.options} />
 							</Col>
 						</Row>

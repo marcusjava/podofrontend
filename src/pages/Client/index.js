@@ -69,6 +69,7 @@ const Client = () => {
 		formRef.current.reset();
 		setEditMode(true);
 		formRef.current.setFieldValue('id', row._id);
+		formRef.current.setFieldValue('thumbnail', row.avatar_url);
 		formRef.current.setFieldValue('name', row.name);
 		formRef.current.setFieldValue('instagram', row.instagram);
 		formRef.current.setFieldValue('cpf', row.cpf);

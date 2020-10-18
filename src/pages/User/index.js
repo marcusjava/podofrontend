@@ -45,6 +45,7 @@ const User = () => {
 		setEditMode(true);
 		setShowPwd(false);
 		formRef.current.setFieldValue('_id', row.id);
+		formRef.current.setFieldValue('thumbnail', row.avatar_url);
 		formRef.current.setFieldValue('name', row.name);
 		formRef.current.setFieldValue('phone', row.phone);
 		formRef.current.setFieldValue('cpf', row.cpf);

@@ -17,7 +17,7 @@ const NavBar = () => {
 	const dispatch = useDispatch();
 	return (
 		<Navbar variant="dark" expand="lg">
-			<Navbar.Brand href="#home">
+			<Navbar.Brand href="#/inicio/principal">
 				<img src={Logo} alt="Logo" width="35" height="35" className="d-inline-block align-top" />
 			</Navbar.Brand>
 			<Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -31,12 +31,6 @@ const NavBar = () => {
 					<LinkContainer to="/inicio/clientes" className="text-white">
 						<Nav.Link active={false}>
 							<GiMorgueFeet /> Clientes
-						</Nav.Link>
-					</LinkContainer>
-
-					<LinkContainer to="/inicio/consultas" className="text-white">
-						<Nav.Link active={false}>
-							<FaBriefcaseMedical /> Consultas
 						</Nav.Link>
 					</LinkContainer>
 

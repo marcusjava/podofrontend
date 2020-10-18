@@ -34,6 +34,7 @@ const Select = ({ name, label, disabled, ...rest }) => {
 			<label>{label}</label>
 			<ReactSelect
 				ref={selectRef}
+				placeholder="Selecione..."
 				className={classnames({ 'border border-danger is-invalid': error })}
 				defaultValue={defaultValue}
 				classNamePrefix="react-select"

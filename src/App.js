@@ -31,7 +31,7 @@ if (localStorage.getItem('token')) {
 }
 
 axios.defaults.baseURL =
-	process.env.NODE_ENV === 'development' ? 'http://localhost:3001/api' : 'https://podo-backend.herokuapp.com/api/';
+	process.env.NODE_ENV === 'development' ? 'http://localhost:3001/api' : 'https://nanapodo.herokuapp.com/api/';
 // process.env.REACT_APP_DEV_API_URL;
 // 'http://3.129.92.92:3001/api';
 //https://podo-backend.herokuapp.com/api/

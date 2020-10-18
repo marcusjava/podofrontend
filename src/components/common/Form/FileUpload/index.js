@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { useField } from '@unform/core';
 import camera from '../../../../images/camera.svg';
+import { MdDelete } from 'react-icons/md';
 import './styles.css';
 
 const FileUpload = ({ name, ...rest }) => {
@@ -31,24 +32,38 @@ const FileUpload = ({ name, ...rest }) => {
 				ref.value = '';
 				setPreview(null);
 			},
-			setValue: (value) => {
+			setValue: (input, value) => {
 				setPreview(value);
 			},
 		});
 	}, [fieldName, registerField]);
 
+	const clearPhoto = (e) => {
+		e.preventDefault();
+		setPreview(defaultValue);
+	};
+
 	return (
-		<label id="thumbnail" style={{ backgroundImage: `url(${preview})` }} className={preview ? 'has-thumbnail' : ''}>
-			<input
-				type="file"
-				ref={inputRef}
-				onChange={handlePreview}
-				defaultValue={defaultValue}
-				{...rest}
-				accept="image/png, image/jpeg"
-			/>
-			<img src={camera} alt="camera" />
-		</label>
+		<>
+			<label
+				id="thumbnail"
+				style={{ backgroundImage: `url(${preview})` }}
+				className={preview ? 'has-thumbnail' : ''}
+			>
+				<input
+					type="file"
+					ref={inputRef}
+					onChange={handlePreview}
+					defaultValue={defaultValue}
+					{...rest}
+					accept="image/png, image/jpeg"
+				/>
+				<img src={camera} alt="camera" />
+			</label>
+			<button className="btn btn-link clearButton" onClick={clearPhoto}>
+				<MdDelete size={18} />
+			</button>
+		</>
 	);
 };
 
