@@ -687,7 +687,7 @@ const Consult = () => {
 					</Scope>
 					<Row>
 						<Col>
-							<p className="subtitle">Lesões na Ortopedicas</p>
+							<p className="subtitle">Lesões Ortopedicas</p>
 						</Col>
 					</Row>
 					<Scope path="orto_lesoes">
