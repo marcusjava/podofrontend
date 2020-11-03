@@ -59,6 +59,7 @@ const Client = () => {
 		}
 		if (Object.keys(error).length > 0) {
 			const errorMessages = {};
+			toastr.error(error.message);
 			errorMessages[error.path] = error.message;
 			formRef.current.setErrors(errorMessages);
 		}

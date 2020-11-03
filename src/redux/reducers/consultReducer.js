@@ -43,6 +43,7 @@ export default (state = initialState, action) => {
 					item: action.payload,
 					loading: false,
 					success: true,
+					error: {},
 				},
 			};
 

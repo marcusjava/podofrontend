@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 const Input = ({ name, info, label, disabled, ...rest }) => {
 	const inputRef = useRef(null);
-	const { fieldName, defaultValue, registerField, error } = useField(name);
+	const { fieldName, defaultValue, registerField, error, clearError } = useField(name);
 
 	useEffect(() => {
 		registerField({
@@ -19,6 +19,7 @@ const Input = ({ name, info, label, disabled, ...rest }) => {
 			<input
 				id={fieldName}
 				ref={inputRef}
+				onFocus={clearError}
 				className={classnames('form-control form-control-sm', { 'is-invalid': error })}
 				disabled={disabled}
 				defaultValue={defaultValue}

@@ -77,7 +77,7 @@ export default (state = initialState, action) => {
 				...state,
 				user: {
 					...state.user,
-
+					error: {},
 					loading: false,
 					success: true,
 				},
@@ -88,7 +88,6 @@ export default (state = initialState, action) => {
 			};
 
 		case UPDATE_USER_SUCCESS:
-			console.log(action.payload);
 			const index = state.users.items.findIndex((item) => item._id === action.payload._id);
 			const newArray = [...state.users.items];
 			newArray[index] = action.payload;
