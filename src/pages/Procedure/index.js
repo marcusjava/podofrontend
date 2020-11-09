@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
-import { Input, TextArea, Select } from '../../components/common/Form';
+import { Input, TextArea, Select, InputMask } from '../../components/common/Form';
 import Table from '../../components/procedure/Table';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveProcedure, updateProcedure } from '../../redux/actions/procedureActions';
@@ -32,6 +32,7 @@ const Procedure = () => {
 			_id: row._id,
 			service: { value: row.service._id, label: row.service.description },
 			name: row.name,
+			price: row.price,
 			description: row.description,
 		});
 	};
@@ -62,6 +63,7 @@ const Procedure = () => {
 			const sendData = {
 				service: data.service.value,
 				name: data.name,
+				price: data.price,
 				description: data.description,
 			};
 			editMod ? dispatch(updateProcedure(sendData, data._id)) : dispatch(saveProcedure(sendData));
@@ -69,6 +71,7 @@ const Procedure = () => {
 			if (error instanceof Yup.ValidationError) {
 				const errorMessages = {};
 				error.inner.forEach((erro) => {
+					console.log(error);
 					errorMessages[erro.path] = erro.message;
 					formRef.current.setErrors(errorMessages);
 				});
@@ -98,6 +101,11 @@ const Procedure = () => {
 				<Row>
 					<Col md={4}>
 						<Input name="name" label="Procedimento" />
+					</Col>
+				</Row>
+				<Row>
+					<Col md={1}>
+						<InputMask name="price" mask="9999" maskPlaceholder={null} label="Preço R$" />
 					</Col>
 				</Row>
 				<Row>

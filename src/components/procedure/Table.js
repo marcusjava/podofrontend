@@ -47,9 +47,6 @@ const Table = ({ rowSelect }) => {
 			<TableHeaderColumn isKey dataField="_id" hidden>
 				Id
 			</TableHeaderColumn>
-			<TableHeaderColumn dataField="name" filter={{ type: 'TextFilter', delay: 1000 }} dataSort={true}>
-				Procedimento
-			</TableHeaderColumn>
 			<TableHeaderColumn
 				dataField="service"
 				filter={{ type: 'TextFilter', delay: 1000 }}
@@ -58,6 +55,17 @@ const Table = ({ rowSelect }) => {
 				width={'180px'}
 			>
 				Serviço
+			</TableHeaderColumn>
+			<TableHeaderColumn
+				dataField="name"
+				filter={{ type: 'TextFilter', delay: 1000 }}
+				dataSort={true}
+				width="600"
+			>
+				Procedimento
+			</TableHeaderColumn>
+			<TableHeaderColumn dataField="price" width="100">
+				Valor
 			</TableHeaderColumn>
 			<TableHeaderColumn dataField="description">Descrição</TableHeaderColumn>
 			<TableHeaderColumn width="90" dataFormat={actionFormat}>
